@@ -6,9 +6,10 @@ GB DASH IS A GEOMETRY DASH PORT FOR GAMEBOY DEVELOPED BY CRAFTYJUMPER AND ELANGE
 ## develop info
 
 The game is being developed with gb studio in the C programming language (based on GBDK). This is just beginning its development, so there won't be too frequent updates
-|contributor|role (in no particular order)|
+|contributor|He does:|
 |---|---|
-|[Z]() / [U]()|primary lead developer, project creator 
+|[Crafty Jumper]() / [ElAngel378]()|Project creators and main developers 
+
 ## extra
 
 If do you want to contribute to this project, please 
