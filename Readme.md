@@ -14,4 +14,5 @@ The game is being developed with gb studio in the C programming language (based 
 ## extra
 
 If do you want to contribute to this project, please 
-Join to our discord server: https://discord.gg/fwWqcfbC
+Join to our discord server: 
+https://discord.gg/cg8NRGxJTv
