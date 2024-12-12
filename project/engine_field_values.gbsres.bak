@@ -15,11 +15,11 @@
     },
     {
       "id": "plat_walk_vel",
-      "value": 11250
+      "value": 11000
     },
     {
       "id": "plat_run_vel",
-      "value": 11250
+      "value": 11000
     },
     {
       "id": "plat_walk_acc",

@@ -21,8 +21,7 @@
     {
       "command": "EVENT_MUSIC_PLAY",
       "args": {
-        "musicId": "aa075aa8-5917-4d75-bf51-13963e5cf8dd",
-        "__collapse": true
+        "musicId": "aa075aa8-5917-4d75-bf51-13963e5cf8dd"
       },
       "id": "0e2d5fde-6969-4d19-945e-695521dfcb18"
     }
@@ -30,6 +29,5 @@
   "playerHit1Script": [],
   "playerHit2Script": [],
   "playerHit3Script": [],
-  "playerSpriteSheetId": "63de32e0-f65f-471f-a016-788db6831b4a",
-  "autoFadeEventCollapse": true
+  "playerSpriteSheetId": "63de32e0-f65f-471f-a016-788db6831b4a"
 }

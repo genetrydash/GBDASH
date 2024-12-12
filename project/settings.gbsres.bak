@@ -3,8 +3,8 @@
   "startSceneId": "5b91a2b7-124a-495d-a0cb-c96c1550e98f",
   "startX": 1,
   "startY": 50,
-  "startMoveSpeed": 4,
-  "startAnimSpeed": 1,
+  "startMoveSpeed": 1,
+  "startAnimSpeed": 15,
   "startDirection": "right",
   "showCollisionExtraTiles": false,
   "sgbEnabled": false,
@@ -83,7 +83,7 @@
   ],
   "colorMode": "mixed",
   "generateDebugFilesEnabled": false,
-  "compilerPreset": 3000,
+  "compilerPreset": 1000,
   "scriptEventPresets": {},
   "scriptEventDefaultPresets": {}
 }
