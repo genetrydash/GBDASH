@@ -1,4 +1,4 @@
-![image](https://github.com/ElAngel378/GBDASH/blob/main/Extra%20stuff/logo%20-%20GB%20Dash.png)
+![image](https://github.com/ElAngel378/GBDASH/blob/main/.GitHub/artwork/logo.png)
 
 ## about
 
