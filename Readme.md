@@ -14,4 +14,5 @@ The game is being developed with GBDK. This is just beginning its development, s
 ## extra
 
 If do you want to contribute to this project, please 
-Contact to ElAngel378 or Crafty_Jumper via discord 
+Contact to ElAngel378 or Crafty Jumper via discord
+Handles: craftyjumper, elangel378
