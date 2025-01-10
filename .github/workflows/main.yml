@@ -22,6 +22,11 @@ jobs:
           make
           sudo make install
           cd ..
-      - name: Build and deploy
+      - name: Build
         run: |
-          make
+          lcc -Wa-l -Wl-m -o main.gb main.c
+      - name: Deploy
+        uses: actions/upload-artifact@v2
+        with:
+          name: main.gb
+          path: main.gb
