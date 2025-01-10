@@ -16,7 +16,12 @@ jobs:
       - name: Setup GBDK
         run: |
           sudo apt-get update
-          sudo apt-get install -y lcc
+          sudo apt-get install -y git
+          git clone https://github.com/gbdk-2020/gbdk-2020.git
+          cd gbdk-2020
+          make
+          sudo make install
+          cd ..
       - name: Build and deploy
         run: |
           make
