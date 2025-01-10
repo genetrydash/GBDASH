@@ -1,6 +1,6 @@
 name: nightly
 
-on:
+on: [push]
   schedule:
     - cron: 0 0 * * *
 
