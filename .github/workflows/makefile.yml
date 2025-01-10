@@ -1,30 +1,28 @@
-name: Build
+name: Build nightly
 
 on:
   push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: devkitpro/devkitarm
+    name: Compile ROM
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Setup GBDK
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git
-          git clone https://github.com/gbdk-2020/gbdk-2020.git
-          cd gbdk-2020
-          make
-          sudo make install
-          cd ..
-      - name: Build
-        run: |
-          make
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
-          name: Example.gb
-          path: Example.gb
+          submodules: recursive
+      - name: Make application
+        run: |
+          make
+      - name: Prepare for build publishing
+        run: |
+          mkdir -p out/rom
+          cp build/Example.gb out/rom
+      - name: Publish build to GH Actions
+        uses: actions/upload-artifact@v4
+        with:
+          path: out/rom
+          name: Example
