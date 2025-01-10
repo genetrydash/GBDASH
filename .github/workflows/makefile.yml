@@ -1,27 +1,30 @@
-name: Makefile CI
+name: Build
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: configure
-      run: ./configure
-
-    - name: Install dependencies
-      run: make
-
-    - name: Run check
-      run: make check
-
-    - name: Run distcheck
-      run: make distcheck
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup GBDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          git clone https://github.com/gbdk-2020/gbdk-2020.git
+          cd gbdk-2020
+          make
+          sudo make install
+          cd ..
+      - name: Build
+        run: |
+          make
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Example.gb
+          path: Example.gb
