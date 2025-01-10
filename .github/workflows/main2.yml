@@ -1,0 +1,33 @@
+name: Nightly
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup GBDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential
+          git clone https://github.com/gbdk-2020/gbdk-2020.git
+          cd gbdk-2020
+          make
+          sudo make install
+          cd ..
+      - name: Build
+        run: |
+          lcc -Wa-l -Wl-m -o main.gb main.c
+      - name: Deploy
+        uses: actions/upload-artifact@v3
+        with:
+          name: main.gb
+          path: main.gb
+          retention_days: 30
