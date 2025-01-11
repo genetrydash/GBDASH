@@ -1,16 +1,13 @@
 #include <gb/gb.h>
-#include <stdint.h>
 #include <stdio.h>
 #include "tiles.c"
-#include "tileset.c"
-#include "map.c"
 
 #define GRAVITY 1
-#define JUMP_STRENGTH 8
-#define GROUND_Y 128  // El nivel del suelo (posición Y en la pantalla)
-#define MOVE_SPEED_X 1 // Velocidad de movimiento horizontal
+#define JUMP_STRENGTH 10
+#define GROUND_Y 120  // El nivel del suelo (posición Y en la pantalla)
+#define MOVE_SPEED_X 2 // Velocidad de movimiento horizontal
 
-UINT8 player_x = 0;      // Posición X del jugador en la pantalla
+UINT8 player_x = 50;      // Posición X del jugador en la pantalla
 UINT8 player_y = GROUND_Y; // Posición Y del jugador en la pantalla
 INT8 velocity_y = 0;       // Velocidad vertical del jugador
 
@@ -26,7 +23,7 @@ void update_player_position() {
         player_y = GROUND_Y;
         velocity_y = 0; // Detenemos la velocidad hacia abajo cuando el jugador toca el suelo
     }
-
+    
     // Actualizamos la posición del sprite del jugador
     move_sprite(0, player_x, player_y);
 }
@@ -51,31 +48,27 @@ void move_player_auto() {
 }
 
 void main() {
-
-    set_bkg_data(0,24,TileLabel1);
-    set_bkg_tiles(0,0,64,16,MapLabel);
-
     // Inicializamos la Game Boy
     DISPLAY_ON;
     SHOW_BKG;
     SHOW_SPRITES;
-
+    
     // Cargamos el sprite del jugador en memoria (usamos la ranura de sprite 0)
     set_sprite_data(0,2,TileLabel);
     set_sprite_tile(0,0);
-
+    
     while(1) {
         // Actualizamos el movimiento automático del jugador
         move_player_auto();
-
+        
         // Comprobamos si se presiona el botón de salto
         if (joypad() & J_A) {
             jump();
         }
-
+        
         // Actualizamos la posición del jugador (gravedad y salto)
         update_player_position();
-
+        
         // Esperamos al siguiente fotograma
         wait_vbl_done();
     }
