@@ -19,6 +19,7 @@ Handles: craftyjumper, elangel378
 
 ## TODO
 • Make bigger sprites
-• Do more faithful mechanics
-• getting a test level working
-• add level compressor HLE
+ • Do more faithful mechanics
+  • getting a test level working
+   • add level compressor HLE
+    • nightly builds
