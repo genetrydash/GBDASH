@@ -16,3 +16,9 @@ The game is being developed with GBDK. This is just beginning its development, s
 If do you want to contribute to this project, please 
 Contact to ElAngel378 or Crafty Jumper via discord
 Handles: craftyjumper, elangel378
+
+## TODO
+• Make bigger sprites
+• Do more faithful mechanics
+• getting a test level working
+• add level compressor HLE
