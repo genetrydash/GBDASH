@@ -10,7 +10,7 @@ The game is being developed with GBDK. This is just beginning its development, s
 | contributor | What they did:|
 |---|---|
 |[Crafty Jumper](https://github.com/crafty-jumper) / [ElAngel378](https://github.com/ElAngel378)|Project creators and main developers 
-| Ranedom | Graphics |
+| Ranedom | Graphics and music |
 | The thingy | resources and code |
 
 ## Contibuting
