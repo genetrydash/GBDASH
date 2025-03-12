@@ -6,7 +6,7 @@ GB Dash is a demake of Geometry Dash for the gameboy :)
 
 ## Development Info
 
-The game is being developed with GBDK. This is just beginning its development, so there won't be too frequent updates
+The game is being developed with GBDK. This is just beginning its development, so there won't be too frequent updates.
 | contributor | What they did:|
 |---|---|
 |[Crafty Jumper](https://github.com/crafty-jumper) / [ElAngel378](https://github.com/ElAngel378)|Project creators and main developers 
