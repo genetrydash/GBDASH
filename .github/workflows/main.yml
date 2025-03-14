@@ -16,19 +16,20 @@ jobs:
           sudo apt install -y wget unzip
           wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
-          mv gbdk /opt/gbdk
+          sudo mv gbdk /opt/gbdk
+          echo "export GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
           echo "/opt/gbdk/bin" >> $GITHUB_PATH
 
       - name: Verify GBDK installation
         run: |
-          export GBDKDIR=/opt/gbdk
           echo "GBDKDIR is set to $GBDKDIR"
+          ls -l /opt/gbdk
           ls -l /opt/gbdk/bin
+          ls -l /opt/gbdk/bin/sdcc
           lcc -v
 
       - name: Compile GameBoy ROM
         run: |
-          export GBDKDIR=/opt/gbdk
           mkdir -p build
           lcc -o build/game.gb main.c
 
