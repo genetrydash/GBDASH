@@ -1,4 +1,4 @@
-name: Build Game
+name: Build GameBoy Game
 
 on: [push, pull_request]
 
@@ -7,12 +7,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      
-      - name: Make application
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Install dependencies
         run: |
           sudo apt update
@@ -27,8 +24,8 @@ jobs:
           mkdir -p build
           lcc -o build/game.gb main.c
 
-      - name: Publish build to GH Actions
-        uses: actions/upload-artifact@v4
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4 
         with:
-          path: out/rom
-          name: GBDASH
+          name: GameBoy-ROM
+          path: build/game.gb
