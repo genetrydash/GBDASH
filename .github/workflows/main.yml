@@ -1,0 +1,31 @@
+name: Build GameBoy Game
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
+          tar -xzf gbdk-linux64.tar.gz
+          echo "$(pwd)/gbdk/bin" >> $GITHUB_PATH
+
+      - name: Compile GameBoy ROM
+        run: |
+          export GBDKDIR=$(pwd)/gbdk
+          mkdir -p build
+          lcc -o build/game.gb src/*.c
+
+      - name: Upload ROM
+        uses: actions/upload-artifact@v3
+        with:
+          name: GameBoy-ROM
+          path: build/game.gb
