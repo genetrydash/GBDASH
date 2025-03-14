@@ -22,7 +22,7 @@ jobs:
         run: |
           export GBDKDIR=$(pwd)/gbdk
           mkdir -p build
-          lcc -o build/game.gb src/*.c
+          lcc -o build/game.gb main.c
 
       - name: Upload ROM
         uses: actions/upload-artifact@v3
