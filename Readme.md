@@ -22,11 +22,9 @@ The game is being developed with GBDK. This is just beginning its development, s
 
 
 ## To-Do
-- Make bigger sprites
 - Do more faithful mechanics
 - getting a test level working
 - add level compressor HLE
-- nightly builds
 
 ---
 
