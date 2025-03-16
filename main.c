@@ -7,18 +7,18 @@
 
 #define GRAVITY 1
 #define JUMP_STRENGTH 8
-#define GROUND_Y 128  // El nivel del suelo (posici髇 Y en la pantalla)
+#define GROUND_Y 128  // El nivel del suelo (posici贸n Y en la pantalla)
 #define MOVE_SPEED_X 1 // Velocidad de movimiento horizontal
 
-UINT8 player_x = 0;      // Posici髇 X del jugador en la pantalla
-UINT8 player_y = GROUND_Y; // Posici髇 Y del jugador en la pantalla
+UINT8 player_x = 0;      // Posici贸n X del jugador en la pantalla
+UINT8 player_y = GROUND_Y; // Posici贸n Y del jugador en la pantalla
 INT8 velocity_y = 0;       // Velocidad vertical del jugador
 
 void update_player_position() {
     // Actualizamos la velocidad vertical con la gravedad
     velocity_y += GRAVITY;
 
-    // Actualizamos la posici髇 Y del jugador seg鷑 la velocidad vertical
+    // Actualizamos la posici贸n Y del jugador seg煤n la velocidad vertical
     player_y += velocity_y;
 
     // Evitamos que el jugador pase por debajo del nivel del suelo
@@ -27,7 +27,7 @@ void update_player_position() {
         velocity_y = 0; // Detenemos la velocidad hacia abajo cuando el jugador toca el suelo
     }
 
-    // Actualizamos la posici髇 del sprite del jugador
+    // Actualizamos la posici贸n del sprite del jugador
     move_sprite(0, player_x, player_y);
 }
 
@@ -38,15 +38,15 @@ void jump() {
 }
 
 void move_player_auto() {
-    // Movimiento autom醫ico en la direcci髇 X (hacia la derecha)
+    // Movimiento autom谩tico en la direcci贸n X (hacia la derecha)
     player_x += MOVE_SPEED_X;
 
     // Si el jugador se sale de la pantalla (por ejemplo, al superar el borde derecho), lo reiniciamos
-    if (player_x > 160) {  // El ancho de la pantalla es 160 p韝eles
+    if (player_x > 160) {  // El ancho de la pantalla es 160 p铆xeles
         player_x = 0;
     }
 
-    // Actualizamos la posici髇 del sprite
+    // Actualizamos la posici贸n del sprite
     move_sprite(0, player_x, player_y);
 }
 
@@ -65,15 +65,15 @@ void main() {
     set_sprite_tile(0,0);
 
     while(1) {
-        // Actualizamos el movimiento autom醫ico del jugador
+        // Actualizamos el movimiento autom谩tico del jugador
         move_player_auto();
 
-        // Comprobamos si se presiona el bot髇 de salto
-        if (joypad() & J_A) {
+        // Comprobamos si se presiona el bot贸n de salto
+        if (joypad() & J_A | J_UP) {
             jump();
         }
 
-        // Actualizamos la posici髇 del jugador (gravedad y salto)
+        // Actualizamos la posici贸n del jugador (gravedad y salto)
         update_player_position();
 
         // Esperamos al siguiente fotograma
