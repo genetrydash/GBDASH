@@ -69,9 +69,9 @@ void main() {
         move_player_auto();
 
         // Comprobamos si se presiona el botón de salto
-        if (joypad() & J_A | J_UP) {
-            jump();
-        }
+    if (joypad() & (J_A | J_UP)) {
+        jump();
+    }
 
         // Actualizamos la posición del jugador (gravedad y salto)
         update_player_position();
