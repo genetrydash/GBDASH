@@ -17,23 +17,31 @@ jobs:
           wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
           sudo mv gbdk /opt/gbdk
+
           echo "GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
           echo "/opt/gbdk/bin" >> $GITHUB_PATH
+
+      - name: Verify GBDK installation
+        run: |
+          echo "GBDKDIR: $GBDKDIR"
+          which lcc
+          lcc -v
 
       - name: Compile all source files and build ROM
         run: |
           mkdir -p build
-          # Compilar todos los archivos .c de src/ a .o
+          
+          # Compilar todos los .c de src/ en .o
           for file in src/*.c; do
             echo "Compilando $file"
             lcc -Ihugedriver/include -c -o "${file%.c}.o" "$file"
           done
 
-          # Buscar todos los .o compilados y enlazarlos
+          # Obtener todos los .o generados
           OBJ_FILES=$(ls src/*.o | tr '\n' ' ')
           echo "Objetos a enlazar: $OBJ_FILES"
 
-          # Compilar el juego final
+          # Compilar y enlazar
           lcc -Ihugedriver/include -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
 
       - name: Upload ROM
