@@ -21,27 +21,25 @@ jobs:
           echo "GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
           echo "/opt/gbdk/bin" >> $GITHUB_PATH
 
-      - name: Verify GBDK installation
+      - name: Confirm environment
         run: |
-          echo "GBDKDIR: $GBDKDIR"
+          echo "GBDKDIR is $GBDKDIR"
+          echo "PATH is $PATH"
           which lcc
           lcc -v
 
-      - name: Compile all source files and build ROM
+      - name: Compile and build ROM
         run: |
           mkdir -p build
-          
-          # Compilar todos los .c de src/ en .o
+
+          # Compilar todos los .c en src a .o
           for file in src/*.c; do
             echo "Compilando $file"
             lcc -Ihugedriver/include -c -o "${file%.c}.o" "$file"
           done
 
-          # Obtener todos los .o generados
+          # Enlazar todos los .o
           OBJ_FILES=$(ls src/*.o | tr '\n' ' ')
-          echo "Objetos a enlazar: $OBJ_FILES"
-
-          # Compilar y enlazar
           lcc -Ihugedriver/include -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
 
       - name: Upload ROM
