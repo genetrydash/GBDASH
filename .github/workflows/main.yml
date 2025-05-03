@@ -10,23 +10,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies and GBDK-2020 v4.3.0
+      - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y wget tar
-
-          wget https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz
+          sudo apt install -y wget unzip
+          wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
-
-          echo "GBDKDIR=$PWD/gbdk" >> $GITHUB_ENV
-          echo "$PWD/gbdk/bin" >> $GITHUB_PATH
+          sudo mv gbdk /opt/gbdk
+          echo "export GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
+          echo "/opt/gbdk/bin" >> $GITHUB_PATH
 
       - name: Verify GBDK installation
         run: |
           echo "GBDKDIR is set to $GBDKDIR"
-          ls -l gbdk/
-          ls -l gbdk/bin/
-          which lcc
+          ls -l /opt/gbdk
+          ls -l /opt/gbdk/bin
+          ls -l /opt/gbdk/bin/sdcc
           lcc -v
 
       - name: Compile GameBoy ROM with hUGEDriver
