@@ -1,1 +1,2 @@
-c:\gbdk\bin\lcc -Wa-l -Wl-m -Wl-j -o Betabuild.gb main.c
+c:\gbdk\bin\lcc -Iinclude -Wl-lhugedriver\gbdk/hUGEDriver.lib -o MyGame.gb src/main.c src/music.c src/title_theme.o
+pause
