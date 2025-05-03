@@ -10,27 +10,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download and install GBDK-2020 v4.3.0
+      - name: Install dependencies and GBDK-2020 v4.3.0
         run: |
           sudo apt update
           sudo apt install -y wget tar
 
-          # Descargar versión específica
           wget https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
 
-          # Añadir GBDK a PATH sin mover su estructura original
           echo "GBDKDIR=$PWD/gbdk" >> $GITHUB_ENV
           echo "$PWD/gbdk/bin" >> $GITHUB_PATH
-          export PATH="$PWD/gbdk/bin:$PATH"
 
-      - name: Confirm GBDK installation
+      - name: Verify GBDK installation
         run: |
-          echo "PATH: $PATH"
+          echo "GBDKDIR is set to $GBDKDIR"
+          ls -l gbdk/
+          ls -l gbdk/bin/
           which lcc
           lcc -v
 
-      - name: Compile and build ROM
+      - name: Compile GameBoy ROM with hUGEDriver
         run: |
           mkdir -p build
 
@@ -41,12 +40,12 @@ jobs:
             lcc -Iinclude -c -o "build/$base.o" "$file"
           done
 
-          # Enlazar todos los .o en un solo ROM
+          # Enlazar todos los .o y agregar hUGEDriver
           OBJ_FILES=$(find build -name "*.o")
           lcc -Iinclude -Wl-lhUGEDriver -o build/game.gb $OBJ_FILES
 
-      - name: Upload ROM artifact
+      - name: Upload ROM
         uses: actions/upload-artifact@v4
         with:
-          name: GBDASH.gb
+          name: GameBoy-ROM
           path: build/game.gb
