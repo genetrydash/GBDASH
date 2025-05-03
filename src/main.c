@@ -55,7 +55,7 @@ void main() {
 
     set_bkg_data(0,24,TileLabel1);
     set_bkg_tiles(0,0,64,16,MapLabel);
-    music_init();  // Llama la funci�n que antes estaba en main()
+    music_init();  // Llama la función que antes estaba en main()
 
     // Inicializamos la Game Boy
     DISPLAY_ON;
@@ -71,7 +71,7 @@ void main() {
         move_player_auto();
 
         // Comprobamos si se presiona el botón de salto
-        if (joypad() & J_A | J_UP) {
+        if ((joypad() & (J_A | J_UP))) { // Corregido para verificar A o UP
             jump();
         }
 
