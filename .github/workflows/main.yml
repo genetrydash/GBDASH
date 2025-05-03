@@ -1,0 +1,50 @@
+name: Build GBDASH
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
+          tar -xzf gbdk-linux64.tar.gz
+          sudo mv gbdk /opt/gbdk
+          echo "export GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
+          echo "/opt/gbdk/bin" >> $GITHUB_PATH
+
+      - name: Verify GBDK installation
+        run: |
+          echo "GBDKDIR is set to $GBDKDIR"
+          ls -l /opt/gbdk
+          ls -l /opt/gbdk/bin
+          ls -l /opt/gbdk/bin/sdcc
+          lcc -v
+
+      - name: Compile GameBoy ROM with hUGEDriver
+        run: |
+          mkdir -p build
+
+          # Compilar todos los .c en src/ a .o en build/
+          for file in src/*.c; do
+            base=$(basename "$file" .c)
+            echo "Compilando $file -> build/$base.o"
+            lcc -Iinclude -c -o "build/$base.o" "$file"
+          done
+
+          # Enlazar todos los .o y agregar hUGEDriver
+          OBJ_FILES=$(find build -name "*.o")
+          lcc -Iinclude -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
+
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBDASH
+          path: build/game.gb
