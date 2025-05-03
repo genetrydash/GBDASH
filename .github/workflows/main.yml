@@ -32,15 +32,16 @@ jobs:
         run: |
           mkdir -p build
 
-          # Compilar todos los .c en src a .o
+          # Compilar todos los .c en src a .o en build/
           for file in src/*.c; do
+            base=$(basename "$file" .c)
             echo "Compilando $file"
-            lcc -Ihugedriver/include -c -o "${file%.c}.o" "$file"
+            lcc -Iinclude -c -o "build/$base.o" "$file"
           done
 
-          # Enlazar todos los .o
-          OBJ_FILES=$(ls src/*.o | tr '\n' ' ')
-          lcc -Iinclude -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
+          # Enlazar todos los .o en build/
+          OBJ_FILES=$(find build -name "*.o")
+          lcc -Iinclude -Wl-lhUGEDriver -o build/game.gb $OBJ_FILES
 
       - name: Upload ROM
         uses: actions/upload-artifact@v4
