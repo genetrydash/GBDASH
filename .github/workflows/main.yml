@@ -10,21 +10,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install GBDK-2020
+      - name: Install GBDK-2020 v4.3.0
         run: |
           sudo apt update
-          sudo apt install -y wget unzip
-          wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
+          sudo apt install -y wget tar
+
+          wget https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
           sudo mv gbdk /opt/gbdk
 
           echo "GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
           echo "/opt/gbdk/bin" >> $GITHUB_PATH
+          export PATH=/opt/gbdk/bin:$PATH
 
-      - name: Confirm environment
+      - name: Confirm GBDK installation
         run: |
-          echo "GBDKDIR is $GBDKDIR"
-          echo "PATH is $PATH"
           which lcc
           lcc -v
 
@@ -35,15 +35,15 @@ jobs:
           # Compilar todos los .c en src a .o en build/
           for file in src/*.c; do
             base=$(basename "$file" .c)
-            echo "Compilando $file"
+            echo "Compilando $file -> build/$base.o"
             lcc -Iinclude -c -o "build/$base.o" "$file"
           done
 
-          # Enlazar todos los .o en build/
+          # Enlazar todos los .o
           OBJ_FILES=$(find build -name "*.o")
           lcc -Iinclude -Wl-lhUGEDriver -o build/game.gb $OBJ_FILES
 
-      - name: Upload ROM
+      - name: Upload ROM artifact
         uses: actions/upload-artifact@v4
         with:
           name: GBDASH.gb
