@@ -18,7 +18,7 @@ The game is being developed with GBDK. This is just beginning its development, s
 # To-Do
 - Do more faithful mechanics
 - getting a test level working
-- add level compressor HLE
+- add level compressor RLE
 
 ---
 
