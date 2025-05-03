@@ -10,17 +10,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install GBDK-2020 v4.3.0
+      - name: Download and install GBDK-2020 v4.3.0
         run: |
           sudo apt update
           sudo apt install -y wget tar
 
+          # Descargar versión específica
           wget https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
 
-          # Establecer variables de entorno sin mover la carpeta
+          # Añadir GBDK a PATH sin mover su estructura original
           echo "GBDKDIR=$PWD/gbdk" >> $GITHUB_ENV
           echo "$PWD/gbdk/bin" >> $GITHUB_PATH
+          export PATH="$PWD/gbdk/bin:$PATH"
 
       - name: Confirm GBDK installation
         run: |
@@ -32,14 +34,14 @@ jobs:
         run: |
           mkdir -p build
 
-          # Compilar todos los .c en src a .o en build/
+          # Compilar todos los .c en src/ a .o en build/
           for file in src/*.c; do
             base=$(basename "$file" .c)
             echo "Compilando $file -> build/$base.o"
             lcc -Iinclude -c -o "build/$base.o" "$file"
           done
 
-          # Enlazar todos los .o
+          # Enlazar todos los .o en un solo ROM
           OBJ_FILES=$(find build -name "*.o")
           lcc -Iinclude -Wl-lhUGEDriver -o build/game.gb $OBJ_FILES
 
