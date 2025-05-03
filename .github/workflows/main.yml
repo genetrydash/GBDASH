@@ -41,7 +41,7 @@ jobs:
 
           # Enlazar todos los .o y agregar hUGEDriver
           OBJ_FILES=$(find build -name "*.o")
-          lcc -Iinclude -Wl-lhUGEDriver -o build/game.gb $OBJ_FILES
+          lcc -Iinclude -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
 
       - name: Upload ROM
         uses: actions/upload-artifact@v4
