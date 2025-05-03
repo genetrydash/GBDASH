@@ -1,0 +1,43 @@
+name: Build GameBoy Game
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install GBDK-2020
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://github.com/gbdk-2020/gbdk-2020/releases/latest/download/gbdk-linux64.tar.gz
+          tar -xzf gbdk-linux64.tar.gz
+          sudo mv gbdk /opt/gbdk
+          echo "GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
+          echo "/opt/gbdk/bin" >> $GITHUB_PATH
+
+      - name: Compile all source files and build ROM
+        run: |
+          mkdir -p build
+          # Compilar todos los archivos .c de src/ a .o
+          for file in src/*.c; do
+            echo "Compilando $file"
+            lcc -Ihugedriver/include -c -o "${file%.c}.o" "$file"
+          done
+
+          # Buscar todos los .o compilados y enlazarlos
+          OBJ_FILES=$(ls src/*.o | tr '\n' ' ')
+          echo "Objetos a enlazar: $OBJ_FILES"
+
+          # Compilar el juego final
+          lcc -Ihugedriver/include -Wl-lhugedriver/gbdk/hUGEDriver.lib -o build/game.gb $OBJ_FILES
+
+      - name: Upload ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBDASH.gb
+          path: build/game.gb
