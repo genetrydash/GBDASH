@@ -1,4 +1,4 @@
-![image](https://github.com/ElAngel378/GBDASH/blob/main/.GitHub/artwork/logo.png)
+![image](https://github.com/ElAngel378/GBDASH/blob/main/.github/artwork/logo.png)
 
 ## About
 
