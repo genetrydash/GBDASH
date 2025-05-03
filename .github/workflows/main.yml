@@ -17,14 +17,14 @@ jobs:
 
           wget https://github.com/gbdk-2020/gbdk-2020/releases/download/4.3.0/gbdk-linux64.tar.gz
           tar -xzf gbdk-linux64.tar.gz
-          sudo mv gbdk /opt/gbdk
 
-          echo "GBDKDIR=/opt/gbdk" >> $GITHUB_ENV
-          echo "/opt/gbdk/bin" >> $GITHUB_PATH
-          export PATH=/opt/gbdk/bin:$PATH
+          # Establecer variables de entorno sin mover la carpeta
+          echo "GBDKDIR=$PWD/gbdk" >> $GITHUB_ENV
+          echo "$PWD/gbdk/bin" >> $GITHUB_PATH
 
       - name: Confirm GBDK installation
         run: |
+          echo "PATH: $PATH"
           which lcc
           lcc -v
 
