@@ -8,7 +8,6 @@ DEL src\*.ihx
 DEL src\*.sym
 DEL src\*.o
 
-cls
 echo ----- GAME BUILDED ----------
 
 pause
