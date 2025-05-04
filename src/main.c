@@ -7,47 +7,52 @@
 #include "music.h"
 
 #define GRAVITY 1
-#define JUMP_STRENGTH 8
-#define GROUND_Y 128  // El nivel del suelo (posición Y en la pantalla)
-#define MOVE_SPEED_X 1 // Velocidad de movimiento horizontal
+#define JUMP_STRENGTH 7
+#define GROUND_Y 128  // Ground level (Y position on screen)
+#define MOVE_SPEED_X 1 // Horizontal movement speed
 
-UINT8 player_x = 0;      // Posición X del jugador en la pantalla
-UINT8 player_y = GROUND_Y; // Posición Y del jugador en la pantalla
-INT8 velocity_y = 0;       // Velocidad vertical del jugador
+unsigned char player_x = 0;      // Player's X position on screen
+unsigned char player_y = GROUND_Y; // Player's Y position on screen
+char velocity_y = 0;       // Player's vertical speed
+char frame = 0;
 
 void update_player_position() {
-    // Actualizamos la velocidad vertical con la gravedad
+    // Update vertical speed with gravity
+    if (frame % 20 == 0) {
     velocity_y += GRAVITY;
-
-    // Actualizamos la posición Y del jugador según la velocidad vertical
+    // Update player's Y position based on vertical speed
     player_y += velocity_y;
+}
+    
 
-    // Evitamos que el jugador pase por debajo del nivel del suelo
+    // Prevent the player from going below ground level
     if (player_y >= GROUND_Y) {
         player_y = GROUND_Y;
-        velocity_y = 0; // Detenemos la velocidad hacia abajo cuando el jugador toca el suelo
+        velocity_y = 0; // Stop downward speed when the player hits the ground
     }
 
-    // Actualizamos la posición del sprite del jugador
+    // Update the player's sprite position
     move_sprite(0, player_x, player_y);
+    frame++;
 }
 
 void jump() {
-    if (player_y == GROUND_Y) { // Solo permitimos saltar si estamos en el suelo
-        velocity_y = -JUMP_STRENGTH; // Aplicamos la velocidad vertical hacia arriba para el salto
+    if (player_y == GROUND_Y) { // Only allow jumping if on the ground
+        velocity_y = -JUMP_STRENGTH; // Apply upward vertical speed for the jump
     }
 }
 
 void move_player_auto() {
-    // Movimiento automático en la dirección X (hacia la derecha)
-    player_x += MOVE_SPEED_X;
+    // Automatic movement in the X direction (to the right)
+    if (frame % 8 == 0) {
+    player_x += MOVE_SPEED_X;}
 
-    // Si el jugador se sale de la pantalla (por ejemplo, al superar el borde derecho), lo reiniciamos
-    if (player_x > 160) {  // El ancho de la pantalla es 160 píxeles
+    // If the player goes off-screen (e.g. past the right edge), reset
+    if (player_x > 160) {  // Screen width is 160 pixels
         player_x = 0;
     }
 
-    // Actualizamos la posición del sprite
+    // Update the sprite position
     move_sprite(0, player_x, player_y);
 }
 
@@ -55,30 +60,28 @@ void main() {
 
     set_bkg_data(0,24,TileLabel1);
     set_bkg_tiles(0,0,64,16,MapLabel);
-    music_init();  // Llama la funci�n que antes estaba en main()
+    music_init();  // Call the function that was previously in main()
 
-    // Inicializamos la Game Boy
+    // Initialise the Game Boy
     DISPLAY_ON;
     SHOW_BKG;
     SHOW_SPRITES;
 
-    // Cargamos el sprite del jugador en memoria (usamos la ranura de sprite 0)
+    // Load the player's sprite into memory (use sprite slot 0)
     set_sprite_data(0,2,TileLabel);
     set_sprite_tile(0,0);
 
     while(1) {
-        // Actualizamos el movimiento automático del jugador
+        // Update automatic player movement
         move_player_auto();
 
-        // Comprobamos si se presiona el botón de salto
+        // Check if the jump button is pressed
         if (joypad() & (J_A | J_UP)) {
             jump();
         }
 
-        // Actualizamos la posición del jugador (gravedad y salto)
+        // Update the player's position (gravity and jumping)
         update_player_position();
 
-        // Esperamos al siguiente fotograma
-        wait_vbl_done();
     }
 }

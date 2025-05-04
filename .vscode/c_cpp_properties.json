@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "GBDK",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/gbdk/include",
+                "C:/gbdk/include/gb"
+            ],
+            "defines": [
+                "__SDCC",       // Required for SDCC-based intellisense
+                "GBDK",         // Optional: custom define
+                "GB"            // For targeting Game Boy specifically
+            ],
+            "compilerPath": "C:/gbdk/bin/sdcc.exe",
+            "intelliSenseMode": "gcc-x86",
+            "cStandard": "c89",
+            "cppStandard": "c++03"
+        }
+    ],
+    "version": 4
+}
