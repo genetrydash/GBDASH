@@ -10,17 +10,19 @@
 #define JUMP_STRENGTH 7
 #define GROUND_Y 128
 #define MOVE_SPEED_X 1
+#define MOVE_INTERVAL 4  // Cada cuántos frames se mueve en X
 
 int16_t player_x = 0;
 int16_t player_y = GROUND_Y;
 int8_t velocity_y = 0;
+uint8_t move_timer = 0;
 
 void update_player_position() {
     // Aplicar gravedad
     velocity_y += GRAVITY;
     player_y += velocity_y;
 
-    // Evitar que caiga por debajo del suelo
+    // Evitar caer por debajo del suelo
     if (player_y >= GROUND_Y) {
         player_y = GROUND_Y;
         velocity_y = 0;
@@ -37,10 +39,14 @@ void jump() {
 }
 
 void move_player_auto() {
-    player_x += MOVE_SPEED_X;
+    move_timer++;
+    if (move_timer >= MOVE_INTERVAL) {
+        move_timer = 0;
+        player_x += MOVE_SPEED_X;
 
-    if (player_x > 160) {
-        player_x = 0;
+        if (player_x > 160) {
+            player_x = 0;
+        }
     }
 
     move_sprite(0, (uint8_t)player_x, (uint8_t)player_y);
@@ -67,6 +73,6 @@ void main() {
 
         update_player_position();
 
-        delay(2);  // Reduce la velocidad general para mayor fluidez
+        delay(1);  // Estabiliza el bucle del juego
     }
 }
