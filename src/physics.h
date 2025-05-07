@@ -16,6 +16,7 @@ extern unsigned int player_x;
 
 void jump();
 void update_player();
+int isonground();
 
 
 #endif
