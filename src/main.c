@@ -84,5 +84,6 @@ while(1) {
     // Update the player's position (gravity and jumping)  
     update_player_position();  
 
-    }
+}
+
 }
