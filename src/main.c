@@ -8,71 +8,81 @@
 
 #define GRAVITY 1
 #define JUMP_STRENGTH 7
-#define GROUND_Y 128
-#define MOVE_SPEED_X 1
-#define MOVE_INTERVAL 4  // Cada cuántos frames se mueve en X
+#define GROUND_Y 128  // Ground level (Y position on screen)
+#define MOVE_SPEED_X 1 // Horizontal movement speed
 
-int16_t player_x = 0;
-int16_t player_y = GROUND_Y;
-int8_t velocity_y = 0;
-uint8_t move_timer = 0;
+unsigned char player_x = 0;      // Player's X position on screen
+unsigned char player_y = GROUND_Y; // Player's Y position on screen
+char velocity_y = 0;       // Player's vertical speed
+char frame = 0;
 
 void update_player_position() {
-    // Aplicar gravedad
-    velocity_y += GRAVITY;
-    player_y += velocity_y;
+// Update vertical speed with gravity
+if (frame % 20 == 0) {
+velocity_y += GRAVITY;
+// Update player's Y position based on vertical speed
+player_y += velocity_y;
+}
 
-    // Evitar caer por debajo del suelo
-    if (player_y >= GROUND_Y) {
-        player_y = GROUND_Y;
-        velocity_y = 0;
-    }
+// Prevent the player from going below ground level  
+if (player_y >= GROUND_Y) {  
+    player_y = GROUND_Y;  
+    velocity_y = 0; // Stop downward speed when the player hits the ground  
+}  
 
-    // Actualizar posición del sprite
-    move_sprite(0, (uint8_t)player_x, (uint8_t)player_y);
+// Update the player's sprite position  
+move_sprite(0, player_x, player_y);  
+frame++;
+
 }
 
 void jump() {
-    if (player_y == GROUND_Y) {
-        velocity_y = -JUMP_STRENGTH;
-    }
+if (player_y == GROUND_Y) { // Only allow jumping if on the ground
+velocity_y = -JUMP_STRENGTH; // Apply upward vertical speed for the jump
+}
 }
 
 void move_player_auto() {
-    move_timer++;
-    if (move_timer >= MOVE_INTERVAL) {
-        move_timer = 0;
-        player_x += MOVE_SPEED_X;
+// Automatic movement in the X direction (to the right)
+if (frame % 8 == 0) {
+player_x += MOVE_SPEED_X;}
 
-        if (player_x > 160) {
-            player_x = 0;
-        }
-    }
+// If the player goes off-screen (e.g. past the right edge), reset  
+if (player_x > 160) {  // Screen width is 160 pixels  
+    player_x = 0;  
+}  
 
-    move_sprite(0, (uint8_t)player_x, (uint8_t)player_y);
+// Update the sprite position  
+move_sprite(0, player_x, player_y);
+
 }
 
 void main() {
-    set_bkg_data(0, 24, TileLabel1);
-    set_bkg_tiles(0, 0, 64, 16, MapLabel);
-    music_init();
 
-    DISPLAY_ON;
-    SHOW_BKG;
-    SHOW_SPRITES;
+set_bkg_data(0,24,TileLabel1);  
+set_bkg_tiles(0,0,64,16,MapLabel);  
+music_init();  // Call the function that was previously in main()  
 
-    set_sprite_data(0, 2, TileLabel);
-    set_sprite_tile(0, 0);
+// Initialise the Game Boy  
+DISPLAY_ON;  
+SHOW_BKG;  
+SHOW_SPRITES;  
 
-    while (1) {
-        move_player_auto();
+// Load the player's sprite into memory (use sprite slot 0)  
+set_sprite_data(0,2,TileLabel);  
+set_sprite_tile(0,0);  
 
-        if (joypad() & (J_A | J_UP)) {
-            jump();
-        }
+while(1) {  
+    // Update automatic player movement  
+    move_player_auto();  
 
-        update_player_position();
+    // Check if the jump button is pressed  
+    if (joypad() & (J_A | J_UP)) {  
+        jump();  
+    }  
 
-        delay(1);  // Estabiliza el bucle del juego
+    // Update the player's position (gravity and jumping)  
+    update_player_position();  
+
     }
 }
