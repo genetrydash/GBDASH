@@ -29,7 +29,3 @@ The game is being developed with GBDK. This is just beginning its development, s
 1. Contact ElAngel or Crafty Jumper on Discord (elangel378,craftyjumper)
 2. Ask About contributing
 3. One of us will respond, and add your contribution
-
----
-
-Dev note: This may or may not be continued in the future.
