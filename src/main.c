@@ -9,11 +9,9 @@
 
 void do_scroll() {
     if (x_pos > 50 * MODIFIER) {
-    while (x_pos > 50 * MODIFIER) {
-        scroll_bkg(1,0);
+        scroll_bkg(1, 0);  // Solo scroll de 1 píxel por frame
         x_pos -= 1 * MODIFIER;
     }
-}
 }
 
 void main() {
@@ -32,6 +30,7 @@ void main() {
         if (joypad() & (J_A | J_UP)) {
             jump();
         }
+
         do_scroll();
         update_player();
             // Move sprite
