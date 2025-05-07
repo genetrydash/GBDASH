@@ -8,8 +8,8 @@
 #include "physics.h"
 
 void do_scroll() {
-    if (x_pos > 50 * MODIFIER) {
-        scroll_bkg(1, 0);  // Solo scroll de 1 píxel por frame
+    while (x_pos > 50 * MODIFIER) {
+        scroll_bkg(1, 0);  // Scroll if player is over 1/3 of the screen
         x_pos -= 1 * MODIFIER;
     }
 }
