@@ -4,12 +4,7 @@
       {
         "label": "Build GBDASH",
         "type": "shell",
-        "command": "./build.sh",
-        "options": {
-          "shell": {
-            "executable": "C:\\Program Files\\Git\\bin\\bash.exe"
-          }
-        },
+        "command": "make",
         "group": {
           "kind": "build",
           "isDefault": true

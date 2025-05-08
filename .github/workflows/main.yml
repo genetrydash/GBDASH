@@ -30,8 +30,7 @@ jobs:
 
       - name: Compile GameBoy ROM with hUGEDriver
         run: |
-          chmod +x build.sh
-          ./build.sh
+          make
 
       - name: Upload ROM
         uses: actions/upload-artifact@v4
