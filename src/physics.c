@@ -58,9 +58,9 @@ int isonground() {
     unsigned char tile = get_bkg_tile_xy(world_x, world_y);
 
     // Solid tiles range from 0x30 to 0x100 (from 0x1030 to 0x1100 in memory)
-    if (tile == 0x10) {
-        return TRUE;
-    }
+    //if (tile == 0x10) {
+      //  return TRUE;
+    //}
 
     return FALSE;
 }
