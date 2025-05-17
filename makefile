@@ -35,13 +35,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Conditionally chmod if on Linux
-prebuild:
-ifeq ($(UNAME_S),Linux)
-	chmod +x processers/fur/furnace
-	chmod +x processers/lsdj/lsdj2txt
-endif
-
 # Clean build files
 clean:
 	rm -rf $(BUILD_DIR)
