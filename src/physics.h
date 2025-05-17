@@ -8,6 +8,7 @@
 #define MODIFIER 64
 
 #define GROUND_Y 128  // Ground level (Y position on screen)
+#define MAX_SPEED (7 * MODIFIER)
 
 extern int x_pos;
 extern int y_pos;

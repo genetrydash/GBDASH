@@ -1,1 +1,11 @@
-/build
+build/
+__pycache__/
+
+# Ignore everything in music/
+music/*
+
+# But don't ignore the modules folder
+!music/modules/
+
+# And don't ignore the contents inside modules
+!music/modules/**

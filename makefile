@@ -13,8 +13,15 @@ SOURCES := $(wildcard $(SRC_DIR)/*.c)
 OBJECTS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SOURCES))
 TARGET := $(BUILD_DIR)/game.gb
 
+# Detect OS
+UNAME_S := $(shell uname -s)
+
 # Default rule
-all: $(TARGET)
+all: run_processtotxt prebuild $(TARGET)
+
+# Run processtotxt.py before build
+run_processtotxt:
+	python3 processtotxt.py
 
 # Link final binary
 $(TARGET): $(OBJECTS)
@@ -28,8 +35,15 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
+# Conditionally chmod if on Linux
+prebuild:
+ifeq ($(UNAME_S),Linux)
+	chmod +x processers/fur/furnace
+	chmod +x processers/lsdj/lsdj2txt
+endif
+
 # Clean build files
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all clean
+.PHONY: all clean prebuild run_processtotxt
