@@ -22,8 +22,8 @@ is_windows = platform.system() == "Windows"
 
 # Set executable paths based on OS
 if is_windows:
-    furnace_path = os.path.join(script_dir, "processers", "FUR", "furnace.exe")
-    lsdj2txt_path = os.path.join(script_dir, "processers", "LSDJ", "lsdj2txt.exe")
+    furnace_path = os.path.join("processers", "FUR", "furnace.exe")
+    lsdj2txt_path = os.path.join("processers", "LSDJ", "lsdj2txt.exe")
 else:
     # Use Linux/Mac native binaries or scripts - you need to provide these or install them
     furnace_path = os.path.join(script_dir, "processers", "FUR", "furnace")       # No .exe

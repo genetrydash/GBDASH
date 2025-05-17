@@ -28,6 +28,11 @@ jobs:
           ls -l /opt/gbdk/bin/sdcc
           lcc -v
 
+      - name: Make executables executable
+        run: |
+          chmod +x processers/LSDJ/lsdj2txt
+          chmod +x processers/FUR/furnace
+
       - name: Compile GameBoy ROM with hUGEDriver
         run: |
           make
