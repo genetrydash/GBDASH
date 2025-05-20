@@ -4,9 +4,12 @@ INC_DIR := include
 BUILD_DIR := build
 
 # Tools and flags
-CC := lcc
-CFLAGS := -I$(INC_DIR) -c
-LDFLAGS := -I$(INC_DIR) -Wl-lhugedriver/gbdk/hUGEDriver.lib
+CC      := lcc
+CFLAGS  := -I$(INC_DIR) -c
+LDFLAGS := \
+    -I$(INC_DIR) \
+    -Wl-lhugedriver/gbdk/hUGEDriver.lib \
+
 
 # Sources and objects
 SOURCES := $(wildcard $(SRC_DIR)/*.c)
@@ -20,8 +23,8 @@ UNAME_S := $(shell uname -s)
 all: run_processtotxt prebuild $(TARGET)
 
 # Run processtotxt.py before build
-run_processtotxt:
-	python3 processtotxt.py
+#run_processtotxt:
+#	python3 processtotxt.py
 
 # Link final binary
 $(TARGET): $(OBJECTS)

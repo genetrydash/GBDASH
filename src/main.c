@@ -4,7 +4,6 @@
 #include "tiles.c"
 #include "tileset.c"
 #include "map.c"
-#include "music.h"
 #include "physics.h"
 
 void do_scroll() {
@@ -17,7 +16,7 @@ void do_scroll() {
 void main() {
     set_bkg_data(0, 24, TileLabel1);
     set_bkg_tiles(0, 0, 64, 16, MapLabel);
-    music_init();
+    //music_init();
 
     DISPLAY_ON;
     SHOW_BKG;
