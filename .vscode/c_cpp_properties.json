@@ -8,7 +8,6 @@
                 "C:/gbdk/include/gb"
             ],
             "defines": [
-                "__SDCC",       // Required for SDCC-based intellisense
                 "GBDK",         // Optional: custom define
                 "GB"            // For targeting Game Boy specifically
             ],

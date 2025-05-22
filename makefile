@@ -9,7 +9,7 @@ CFLAGS  := -I$(INC_DIR) -c
 LDFLAGS := \
     -I$(INC_DIR) \
     -Wl-lhugedriver/gbdk/hUGEDriver.lib \
-	-Wl-yt19 -Wl-yo4
+	-Wl-yt19 -Wl-yo8
 
 
 # Sources and objects
