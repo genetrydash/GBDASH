@@ -17,6 +17,11 @@ typedef enum {
     SOUND_NOISE,
 } Sound_Channel;
 
+typedef enum {
+    SWEEP_DOWN = 1,
+    SWEEP_UP = 0
+} Sweep_Dir;
+
 void setenable(char enable);
 void setmastervolume(char left, char right);
 void setpan(Sound_Channel channel, Channel pan);
@@ -24,5 +29,6 @@ void setfreq(Sound_Channel channel, int freq_hz);
 void setenvolope(Sound_Channel channel, char direction, char vol, char period);
 void setlengthandduty(Sound_Channel channel, char length, char duty);
 void play(Sound_Channel channel, char use_length);
+void setsweep(Sweep_Dir dir, char shift, char period);
 
 #endif // AUDIO_DRIVER_H

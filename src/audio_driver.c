@@ -123,3 +123,8 @@ void play(Sound_Channel channel, char use_length) {
         break;
     }
 }
+
+
+void setsweep(Sweep_Dir dir, char shift, char period) {
+    REG(0xFF10) = ((period & 0b111) << 4) | ((shift & 0b1) << 3) | (shift & 0b111);
+}
