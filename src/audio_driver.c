@@ -124,7 +124,46 @@ void play(Sound_Channel channel, char use_length) {
     }
 }
 
-
 void setsweep(Sweep_Dir dir, char shift, char period) {
-    REG(0xFF10) = ((period & 0b111) << 4) | ((shift & 0b1) << 3) | (shift & 0b111);
+    REG(0xFF10) = ((period & 0b111) << 4) | ((dir & 0b1) << 3) | (shift & 0b111);
+}
+
+void setvolume(Sound_Channel channel, char volume) {
+    switch (channel) {
+    case SOUND_PULSE1:
+        // NR14: preserve bits 0-5, update bit 6 (length enable) and bit 7 (trigger)
+        REG(0xFF12) = (volume & 0b1111) << 4;
+        break;
+
+    case SOUND_PULSE2:
+        // NR24
+        REG(0xFF17) = (volume & 0b1111) << 4;
+        break;
+
+    case SOUND_WAVE:
+        // NR34
+        REG(0xFF1C) = (volume & 0b11) << 5;
+        break;
+
+    case SOUND_NOISE:
+        // NR44
+        REG(0xFF21) = (volume & 0b1111) << 4;
+        break;
+
+    default:
+        break;
+    }
+}
+int _i = 0;
+void setwave(const unsigned char* samples_4bit) {
+    REG(0xFF1A) = 0;
+    for (_i = 0; _i < 16; _i++) {
+        // Each byte holds two 4-bit samples
+        unsigned char high = samples_4bit[_i * 2] & 0x0F;      // First sample (high nibble)
+        unsigned char low  = samples_4bit[_i * 2 + 1] & 0x0F;  // Second sample (low nibble)
+        unsigned char packed = (high << 4) | low;
+
+        REG(0xFF30 + _i) = packed;
+    }
+    REG(0xFF1A) = 0b10000000;
 }

@@ -30,5 +30,7 @@ void setenvolope(Sound_Channel channel, char direction, char vol, char period);
 void setlengthandduty(Sound_Channel channel, char length, char duty);
 void play(Sound_Channel channel, char use_length);
 void setsweep(Sweep_Dir dir, char shift, char period);
+void setvolume(Sound_Channel channel, char volume);
+void setwave(const unsigned char* samples_4bit);
 
 #endif // AUDIO_DRIVER_H
