@@ -75,11 +75,6 @@ void main(void)
     set_bkg_data(0, 24, TileLabel1);
     set_bkg_tiles(0, 0, 64, 16, MapLabel);
 
-    setbeatcallback(beat);
-    settickrate(360);
-    setbpm(200*2);
-    initirq();
-
     setenable(1);
     setmastervolume(7, 7);
     setpan(SOUND_PULSE1, CHANNEL_BOTH);
@@ -99,6 +94,11 @@ void main(void)
     setenvolope(SOUND_PULSE1, 0, 15, 1);
     setwave(wave_data);
     setvolume(SOUND_WAVE, 1);
+
+    setbeatcallback(beat);
+    settickrate(360);
+    setbpm(200*2);
+    initirq();
 
     while (1)
     {
