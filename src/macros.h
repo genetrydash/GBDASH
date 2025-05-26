@@ -1,0 +1,1 @@
+#define REG(addr) (*(volatile unsigned char *)(addr))

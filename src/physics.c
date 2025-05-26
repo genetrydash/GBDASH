@@ -8,7 +8,7 @@ int frame = 0;
 int x_pos = 0;
 int y_pos = GROUND_Y * MODIFIER; 
 
-void update_player() {
+void update_player(void) {
     // Apply gravity
     velocity_y += GRAVITY;
     // Apply vertical velocity
@@ -40,13 +40,13 @@ void update_player() {
     player_y = y_pos / MODIFIER;
 }
 
-void jump() {
+void jump(void) {
     if (isonground()) { // Only allow jumping if on the ground
         velocity_y = -JUMP_STRENGTH;
     }
 }
 
-int isonground() {
+int isonground(void) {
     if (y_pos >= GROUND_Y * MODIFIER) {
         return TRUE;
     }

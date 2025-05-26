@@ -15,9 +15,9 @@ extern int y_pos;
 extern unsigned int player_y;
 extern unsigned int player_x;
 
-void jump();
-void update_player();
-int isonground();
+void jump(void);
+void update_player(void);
+int isonground(void);
 
 
 #endif

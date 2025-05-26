@@ -1,7 +1,7 @@
 #if !defined(AUDIO_DRIVER_H)
 #define AUDIO_DRIVER_H
 
-#define REG(addr) (*(volatile unsigned char *)(addr))
+#include "macros.h"
 
 typedef enum {
     CHANNEL_NONE = 0b00000000,
@@ -28,7 +28,6 @@ void setpan(Sound_Channel channel, Channel pan);
 void setfreq(Sound_Channel channel, int freq_hz);
 void setenvolope(Sound_Channel channel, char direction, char vol, char period);
 void setlengthandduty(Sound_Channel channel, char length, char duty);
-void play(Sound_Channel channel, char use_length);
 void setsweep(Sweep_Dir dir, char shift, char period);
 void setvolume(Sound_Channel channel, char volume);
 void setwave(const unsigned char* samples_4bit);
