@@ -1,20 +1,29 @@
 # Directories
 SRC_DIR := src
+MUSIC_DIR := $(SRC_DIR)/music
 INC_DIR := include
 BUILD_DIR := build
+BUILD_MUSIC_DIR := $(BUILD_DIR)/music
 
 # Tools and flags
 CC      := lcc
-CFLAGS  := -I$(INC_DIR) -c
+CFLAGS  := -I$(INC_DIR) -I$(SRC_DIR) -c
 LDFLAGS := \
     -I$(INC_DIR) \
+    -I$(SRC_DIR) \
     -Wl-lhugedriver/gbdk/hUGEDriver.lib \
-	-Wl-yt19 -Wl-yo8
+    -Wl-yt19 -Wl-yo8
 
 
 # Sources and objects
-SOURCES := $(wildcard $(SRC_DIR)/*.c)
-OBJECTS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SOURCES))
+SRC_SOURCES   := $(wildcard $(SRC_DIR)/*.c)
+MUSIC_SOURCES := $(wildcard $(MUSIC_DIR)/*.c)
+SOURCES       := $(SRC_SOURCES) $(MUSIC_SOURCES)
+
+SRC_OBJECTS   := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC_SOURCES))
+MUSIC_OBJECTS := $(patsubst $(MUSIC_DIR)/%.c,$(BUILD_MUSIC_DIR)/%.o,$(MUSIC_SOURCES))
+OBJECTS       := $(SRC_OBJECTS) $(MUSIC_OBJECTS)
+
 TARGET := $(BUILD_DIR)/game.gb
 
 # Detect OS
@@ -35,9 +44,15 @@ $(TARGET): $(OBJECTS)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
-# Ensure build directory exists
+$(BUILD_MUSIC_DIR)/%.o: $(MUSIC_DIR)/%.c | $(BUILD_MUSIC_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
+
+# Ensure build directories exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
+
+$(BUILD_MUSIC_DIR):
+	mkdir -p $(BUILD_MUSIC_DIR)
 
 # Clean build files
 clean:
