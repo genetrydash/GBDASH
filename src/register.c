@@ -1,4 +1,5 @@
 #include "register.h"
+#include "audio_driver.h"
 
 unsigned char length = 0;
 void (*initfunclist[255])(void);  // array of 255 function pointers taking void and returning void
@@ -27,6 +28,7 @@ void stop(char idx)
     {
         cleanfunclist[idx]();
     }
+    panic_sound();
 }
 
 char exists(char idx) {

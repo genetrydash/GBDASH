@@ -31,5 +31,6 @@ void setlengthandduty(Sound_Channel channel, char length, char duty);
 void setsweep(Sweep_Dir dir, char shift, char period);
 void setvolume(Sound_Channel channel, char volume);
 void setwave(const unsigned char* samples_4bit);
+void panic_sound(void);
 
 #endif // AUDIO_DRIVER_H

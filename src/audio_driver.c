@@ -195,3 +195,34 @@ void setwave(const unsigned char *samples_4bit)
     }
     REG(0xFF1A) = 0b10000000;
 }
+
+void panic_sound(void) {
+    // Power off sound hardware
+    REG(0xFF26) = 0x00;
+
+    // Pulse 1
+    REG(0xFF10) = 0x00; // Sweep
+    REG(0xFF11) = 0x00; // Duty/Length
+    REG(0xFF12) = 0x00; // Envelope
+    REG(0xFF13) = 0x00; // Frequency low
+    REG(0xFF14) = 0x00; // Frequency high
+
+    // Pulse 2
+    REG(0xFF16) = 0x00; // Duty/Length
+    REG(0xFF17) = 0x00; // Envelope
+    REG(0xFF18) = 0x00; // Frequency low
+    REG(0xFF19) = 0x00; // Frequency high
+
+    // Wave channel
+    REG(0xFF1A) = 0x00; // Sound ON/OFF
+    REG(0xFF1B) = 0x00; // Length
+    REG(0xFF1C) = 0x00; // Volume
+    REG(0xFF1D) = 0x00; // Frequency low
+    REG(0xFF1E) = 0x00; // Frequency high
+
+    // Noise channel
+    REG(0xFF20) = 0x00; // Length
+    REG(0xFF21) = 0x00; // Envelope
+    REG(0xFF22) = 0x00; // Polynomial counter
+    REG(0xFF23) = 0x00; // Frequency/trigger
+}
