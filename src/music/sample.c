@@ -70,7 +70,7 @@ void init(void) {
 
     setbeatcallback(beat);
     settickrate(360);
-    setbpm(158*2);
+    setbpm(140*2);
     initirq();
 }
 

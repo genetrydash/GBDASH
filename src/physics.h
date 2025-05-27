@@ -5,8 +5,8 @@
 #include <stdint.h>
 
 
-#define GRAVITY 15
-#define JUMP_STRENGTH 192
+#define GRAVITY 14
+#define JUMP_STRENGTH 188
 
 #define NO_SCROLL_POS (50 << MODIFIER_SHIFT)
 #define MOVE_SPEED_X 80 // Horizontal movement speed
