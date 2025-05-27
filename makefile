@@ -9,10 +9,10 @@ BUILD_MUSIC_DIR := $(BUILD_DIR)/music
 CC      := lcc
 CFLAGS  := -I$(INC_DIR) -I$(SRC_DIR) -c
 LDFLAGS := \
-    -I$(INC_DIR) \
-    -I$(SRC_DIR) \
-    -Wl-lhugedriver/gbdk/hUGEDriver.lib \
-    -Wl-yt19 -Wl-yo8
+	-I$(INC_DIR) \
+	-I$(SRC_DIR) \
+	-Wl-lhugedriver/gbdk/hUGEDriver.lib \
+	-Wl-yt19 -Wl-yo8
 
 
 # Sources and objects
@@ -44,14 +44,12 @@ $(TARGET): $(OBJECTS)
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
-$(BUILD_MUSIC_DIR)/%.o: $(MUSIC_DIR)/%.c | $(BUILD_MUSIC_DIR)
+$(BUILD_MUSIC_DIR)/%.o: $(MUSIC_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
 # Ensure build directories exist
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
-
-$(BUILD_MUSIC_DIR):
 	mkdir -p $(BUILD_MUSIC_DIR)
 
 # Clean build files
