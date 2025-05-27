@@ -3,10 +3,9 @@
 
 unsigned int player_x = 0;      // Player's X position on screen
 unsigned int player_y = 0; // Player's Y position on screen
-int velocity_y = 0;       // Player's vertical speed
-int frame = 0;
-int x_pos = 0;
-int y_pos = GROUND_Y * MODIFIER; 
+int16_t velocity_y = 0;       // Player's vertical speed
+uint32_t x_pos = 0;
+int16_t y_pos = GROUND_Y << MODIFIER_SHIFT; 
 
 void update_player(void) {
     // Apply gravity
@@ -19,8 +18,8 @@ void update_player(void) {
         // Move up one subpixel until you're no longer colliding—but cap it
         do {
             y_pos -= 1;
-            player_x = x_pos / MODIFIER;
-    player_y = y_pos / MODIFIER;
+            player_x = x_pos >> MODIFIER_SHIFT;
+            player_y = y_pos >> MODIFIER_SHIFT;
         } while (isonground() && y_pos > 0);
         // Make sure you sit exactly on the ground
         y_pos += 1;
@@ -31,13 +30,13 @@ void update_player(void) {
 
     // Automatic horizontal movement
     x_pos += MOVE_SPEED_X;
-    if (x_pos > 160 * MODIFIER) {
+    if (x_pos > (160 << MODIFIER_SHIFT)) {
         x_pos = 0;
     }
 
     // Convert internal position to screen position
-    player_x = x_pos / MODIFIER;
-    player_y = y_pos / MODIFIER;
+    player_x = x_pos >> MODIFIER_SHIFT;
+    player_y = y_pos >> MODIFIER_SHIFT;
 }
 
 void jump(void) {
@@ -47,15 +46,17 @@ void jump(void) {
 }
 
 int isonground(void) {
-    if (y_pos >= GROUND_Y * MODIFIER) {
+    if (y_pos >= (GROUND_Y << MODIFIER_SHIFT)) {
         return TRUE;
     }
 
     // Convert screen-relative player position to world tile coordinates
-    unsigned char world_x = (SCX_REG + player_x) / 8;
-    unsigned char world_y = (SCY_REG + player_y) + 7 / 8; // Just below the player
+    unsigned char world_x = (SCX_REG + player_x) >> 3;
+    unsigned char world_y = ((SCY_REG + player_y) + 8) >> 3; // Just below the player
 
-    unsigned char tile = get_bkg_tile_xy(world_x, world_y);
+    // NOTE: DO NOT EVER READ FROM VRAM, IT WAITS FOR HBLANK WHICH EQUALS...
+    // **MORE SLOWDOWN!!!**
+    // unsigned char tile = get_bkg_tile_xy(world_x, world_y);
 
     // Solid tiles range from 0x30 to 0x100 (from 0x1030 to 0x1100 in memory)
     //if (tile == 0x10) {

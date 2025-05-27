@@ -11,10 +11,10 @@ extern void register_all_music(void);
 
 void do_scroll(void)
 {
-    while (x_pos > 50 * MODIFIER)
+    while (x_pos > (50 << MODIFIER_SHIFT))
     {
         scroll_bkg(1, 0); // Scroll if player is over 1/3 of the screen
-        x_pos -= 1 * MODIFIER;
+        x_pos -= (1 << MODIFIER_SHIFT);
     }
 }
 
