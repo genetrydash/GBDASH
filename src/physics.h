@@ -5,10 +5,11 @@
 #include <stdint.h>
 
 
-#define GRAVITY 14
-#define JUMP_STRENGTH 180
+#define GRAVITY 15
+#define JUMP_STRENGTH 192
 
-#define MOVE_SPEED_X 88 // Horizontal movement speed
+#define NO_SCROLL_POS (50 << MODIFIER_SHIFT)
+#define MOVE_SPEED_X 80 // Horizontal movement speed
 #define MODIFIER_SHIFT 6
 
 #define GROUND_Y 128  // Ground level (Y position on screen)

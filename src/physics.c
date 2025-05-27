@@ -6,6 +6,7 @@ unsigned int player_y = 0; // Player's Y position on screen
 int16_t velocity_y = 0;       // Player's vertical speed
 uint32_t x_pos = 0;
 int16_t y_pos = GROUND_Y << MODIFIER_SHIFT; 
+uint8_t scroll_x = 0;
 
 void update_player(void) {
     // Apply gravity
@@ -18,25 +19,30 @@ void update_player(void) {
         // Move up one subpixel until you're no longer colliding—but cap it
         do {
             y_pos -= 1;
-            player_x = x_pos >> MODIFIER_SHIFT;
-            player_y = y_pos >> MODIFIER_SHIFT;
         } while (isonground() && y_pos > 0);
         // Make sure you sit exactly on the ground
         y_pos += 1;
         velocity_y = 0;
         
     }
-    
 
     // Automatic horizontal movement
     x_pos += MOVE_SPEED_X;
-    if (x_pos > (160 << MODIFIER_SHIFT)) {
-        x_pos = 0;
+    /*
+    if (x_pos >= (160 << MODIFIER_SHIFT)) {
+        x_pos -= (160 << MODIFIER_SHIFT);
     }
+    */
 
+    if (x_pos >= NO_SCROLL_POS) {
+        player_x = NO_SCROLL_POS >> MODIFIER_SHIFT;
+        scroll_x = (x_pos - NO_SCROLL_POS) >> MODIFIER_SHIFT;
+    } else {
+        player_x = x_pos >> MODIFIER_SHIFT;
+    }
     // Convert internal position to screen position
-    player_x = x_pos >> MODIFIER_SHIFT;
     player_y = y_pos >> MODIFIER_SHIFT;
+    SCX_REG = scroll_x&0xff;
 }
 
 void jump(void) {
