@@ -22,6 +22,8 @@ void do_scroll(void)
 
 void main(void)
 {
+    char current_track = 1;
+
     register_all_music();
     set_bkg_data(0, 24, TileLabel1);
     set_bkg_tiles(0, 0, 64, 16, MapLabel);
@@ -33,18 +35,34 @@ void main(void)
     set_sprite_data(0, 2, TileLabel);
     set_sprite_tile(0, 0);
 
-    play(0);
+    play(current_track);
 
     while (1)
     {
-        if (joypad() & (J_A | J_UP))
-        {
+        uint8_t joy = joypad();
+
+        if (joy & J_A || joy & J_UP) {
             jump();
+        }
+
+        // 🔄 Change music on SELECT
+        if (joy & J_SELECT) {
+            stop(current_track);      // Stop current music
+            current_track++;
+
+            // Wrap around if the next one doesn’t exist
+            while (!exists(current_track)) {
+                current_track = 0;
+            }
+
+            play(current_track);      // Play next one
+
+            // Wait for button release to avoid instant repeat
+            while (joypad() & J_SELECT) wait_vbl_done();
         }
 
         do_scroll();
         update_player();
-        // Move sprite
         move_sprite(0, player_x, player_y);
 
         wait_vbl_done();

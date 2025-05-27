@@ -28,3 +28,7 @@ void stop(char idx)
         cleanfunclist[idx]();
     }
 }
+
+char exists(char idx) {
+    return cleanfunclist[idx] && initfunclist[idx];
+}

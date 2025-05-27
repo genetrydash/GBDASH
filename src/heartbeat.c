@@ -38,6 +38,11 @@ void initirq(void) {
     IE_REG |= TIM_IFLAG;
 }
 
+void closeirq(void) {
+    remove_TIM(irq_handler);
+    IE_REG &= ~TIM_IFLAG;
+}
+
 // Set the beat callback
 void setbeatcallback(void (*callback)(void)) {
     disable_interrupts();

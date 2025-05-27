@@ -1,11 +1,13 @@
 // music_registry.c
-extern void register1(void);
-// Add extern declarations here as you add more music modules
+#define REGISTER_MODULE(x) extern void register##x(void);
+REGISTER_MODULE(1)
+REGISTER_MODULE(2)
 
 typedef void (*RegisterFunc)(void);
 
 RegisterFunc music_registers[] = {
     register1,
+    register2,
     // Add more register functions here
     0
 };

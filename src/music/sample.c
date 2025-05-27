@@ -54,6 +54,7 @@ void beat(void)
 
 
 void init(void) {
+    currentbeat = 0;
     setenable(1);
     setmastervolume(7, 7);
     setpan(SOUND_PULSE1, CHANNEL_BOTH);
@@ -69,12 +70,14 @@ void init(void) {
 
     setbeatcallback(beat);
     settickrate(360);
-    setbpm(200*2);
+    setbpm(158*2);
     initirq();
 }
 
 void stopandclean(void) {
     setenable(0);
+    setbeatcallback(0);
+    closeirq();
 }
 
 void register1(void) {
