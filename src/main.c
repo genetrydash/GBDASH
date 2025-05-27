@@ -9,17 +9,6 @@
 
 extern void register_all_music(void);
 
-void do_scroll(void)
-{
-    while (x_pos > (50 << MODIFIER_SHIFT))
-    {
-        scroll_bkg(1, 0); // Scroll if player is over 1/3 of the screen
-        x_pos -= (1 << MODIFIER_SHIFT);
-    }
-}
-
-
-
 void main(void)
 {
     char current_track = 1;
@@ -61,7 +50,6 @@ void main(void)
             while (joypad() & J_SELECT) wait_vbl_done();
         }
 
-        do_scroll();
         update_player();
         move_sprite(0, player_x, player_y);
 
