@@ -33,8 +33,8 @@ UNAME_S := $(shell uname -s)
 all: run_processtotxt prebuild $(TARGET)
 
 # Run processtotxt.py before build
-run_processtotxt:
-	python3 processtotxt.py
+#run_processtotxt:
+#	python3 processtotxt.py
 
 # Link final binary
 $(TARGET): $(OBJECTS)

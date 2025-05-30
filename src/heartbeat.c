@@ -15,7 +15,7 @@ unsigned char tac_setting = 0;
 unsigned int beatinterval = 0;
 
 // Available Game Boy timer base frequencies
-const unsigned long timer_freqs[] = {4096, 16384, 65536, 262144};
+const unsigned int timer_freqs[] = {4096, 16384, 65535};
 const unsigned char tac_values[] = {0x04, 0x05, 0x06, 0x07};
 
 // Timer interrupt handler
@@ -65,16 +65,16 @@ void setbpm(int bpm) {
 void settickrate(unsigned int rate) {
     unsigned char best_interval = 1;
     unsigned char best_tac = 0x04;
-    unsigned long best_error = 0xFFFFFFFF;
+    unsigned int best_error = 0xFFFF;
     unsigned char i;
 
     // Limit interval range to 8..128
     for (i = 0; i < 4; i++) {
-        unsigned long base_freq = timer_freqs[i];
+        unsigned int base_freq = timer_freqs[i];
         unsigned int interval;
         for (interval = 8; interval <= 200; interval++) {
-            unsigned long est_target = rate * interval;
-            unsigned long error = (base_freq > est_target)
+            unsigned int est_target = rate * interval;
+            unsigned int error = (base_freq > est_target)
                                 ? base_freq - est_target
                                 : est_target - base_freq;
 
