@@ -19,6 +19,7 @@ extern uint32_t x_pos;
 extern int16_t y_pos;
 extern unsigned int player_y;
 extern unsigned int player_x;
+extern uint8_t scroll_x;
 
 void jump(void);
 void update_player(void);
