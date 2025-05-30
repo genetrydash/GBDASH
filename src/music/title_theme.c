@@ -3267,5 +3267,5 @@ void stopandclean1(void) {
 
 
 void register2(void) {
-    registermodule("title",music_init1,stopandclean1);
+    registermodule("Title",music_init1,stopandclean1,"hUGE");
 }

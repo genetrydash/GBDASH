@@ -81,5 +81,5 @@ void stopandclean(void) {
 }
 
 void register1(void) {
-    registermodule("sample",init,stopandclean);
+    registermodule("Sample",init,stopandclean,"None");
 }
