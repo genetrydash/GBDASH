@@ -16,7 +16,7 @@ static void setup(void)
     set_bkg_tiles(0, 0, 64, 16, MapLabel);
 
     SHOW_BKG;
-    SHOW_SPRITES;
+    
 
     set_sprite_data(0, 2, TileLabel);
     set_sprite_tile(0, 0);
@@ -25,6 +25,8 @@ static void setup(void)
     x_pos = 0;
     y_pos = GROUND_Y << MODIFIER_SHIFT; 
     scroll_x = 0;
+    move_sprite(0, player_x, player_y);
+    SHOW_SPRITES;
     play(1);
 }
 
@@ -42,6 +44,7 @@ void dolevel(void)
         }
         if (joy & J_START)
         {
+            HIDE_SPRITES;
             domenu();
             break;
         }

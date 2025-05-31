@@ -22,6 +22,6 @@
 #define logoHeight 18
 #define logoBank 0
 
-extern unsigned char logo[];
+extern unsigned char logoimg[];
 
 /* End of LOGO.H */

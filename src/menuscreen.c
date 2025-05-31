@@ -109,7 +109,7 @@ void fade(void (*callback)(void)) {
 
 static void setup(void) {
     stop(1);
-    set_bkg_data(1,44,Logo);
+    set_bkg_data(1,44,Logoimg);
     set_win_data(45,23,menu);
     set_bkg_tiles(0,0,32,32,blank);
     set_bkg_tiles(2,2,16,3,logo);

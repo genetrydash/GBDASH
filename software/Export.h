@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 22
+  Tiles                : 0 to 43
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -24,8 +24,8 @@
 
 
 /* Bank of tiles. */
-#define menuBank 0
+#define logoBank 0
 /* Start of tile array. */
-extern unsigned char menu[];
+extern unsigned char logo[];
 
 /* End of EXPORT.H */

@@ -26,6 +26,6 @@
 /* Bank of tiles. */
 #define TileLabelBank 0
 /* Start of tile array. */
-extern unsigned char Logo[];
+extern unsigned char Logoimg[];
 
 /* End of EXPORT.H */
