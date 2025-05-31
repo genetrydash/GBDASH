@@ -1,4 +1,5 @@
 #include "audio_driver.h"
+#define REG(addr) (*(volatile unsigned char *)(addr))
 
 static int freq_to_timer(int freq_hz, char iswave)
 {

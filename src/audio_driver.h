@@ -1,7 +1,6 @@
 #if !defined(AUDIO_DRIVER_H)
 #define AUDIO_DRIVER_H
 
-#include "macros.h"
 
 typedef enum {
     CHANNEL_NONE = 0b00000000,
