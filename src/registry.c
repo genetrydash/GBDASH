@@ -2,12 +2,14 @@
 #define REGISTER_MODULE(x) extern void register##x(void);
 REGISTER_MODULE(1)
 REGISTER_MODULE(2)
+REGISTER_MODULE(3)
 
 typedef void (*RegisterFunc)(void);
 
 RegisterFunc music_registers[] = {
     register1,
     register2,
+    register3,
     // Add more register functions here
     0
 };

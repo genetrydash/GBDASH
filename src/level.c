@@ -11,13 +11,11 @@
 
 static void setup(void)
 {
-    stop(0);
+    stopall();
     set_bkg_data(0, 24, TileLabel1);
     set_bkg_tiles(0, 0, 64, 16, MapLabel);
 
     SHOW_BKG;
-    
-
     set_sprite_data(0, 2, TileLabel);
     set_sprite_tile(0, 0);
     player_x = 0;

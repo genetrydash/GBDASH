@@ -25,6 +25,7 @@ void setenable(char enable);
 void setmastervolume(char left, char right);
 void setpan(Sound_Channel channel, Channel pan);
 void setfreq(Sound_Channel channel, int freq_hz);
+void setpitch(Sound_Channel channel, int timer);
 void setenvolope(Sound_Channel channel, char direction, char vol, char period);
 void setlengthandduty(Sound_Channel channel, char length, char duty);
 void setsweep(Sweep_Dir dir, char shift, char period);

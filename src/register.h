@@ -5,5 +5,6 @@ void registermodule(const char *name, void (*init)(void), void (*stopandclean)(v
 void play(char idx);
 void stop(char idx);
 char exists(char idx);
+void stopall(void);
 
 #endif // REGISTER_H

@@ -36,3 +36,16 @@ void stop(char idx)
 char exists(char idx) {
     return cleanfunclist[idx] && initfunclist[idx];
 }
+
+void stopall(void)
+{
+    unsigned char i;
+    for (i = 0; i < length; i++)
+    {
+        if (cleanfunclist[i])
+        {
+            cleanfunclist[i]();
+        }
+    }
+    panic_sound();  // Stop sound after cleaning all modules
+}

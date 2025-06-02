@@ -7,14 +7,14 @@ BUILD_MUSIC_DIR := $(BUILD_DIR)/music
 
 # Tools and flags
 CC      := lcc
-CFLAGS  := -I$(INC_DIR) -I$(SRC_DIR) -c
+CFLAGS  := -I$(INC_DIR) -I$(SRC_DIR) -c -debug
 ROM_TITLE := GB_DASH
 
 LDFLAGS := \
 	-I$(INC_DIR) \
 	-I$(SRC_DIR) \
 	-Wl-lhugedriver/gbdk/hUGEDriver.lib \
-	-Wl-yt19 -Wl-yo8
+	-Wl-yt19 -Wl-yo8 -debug
 
 
 # Sources and objects

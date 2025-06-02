@@ -10,18 +10,15 @@ typedef struct
 
 typedef struct
 {
-    int top;
-    int bottom;
     uint8_t atk, hld, dcy, sus, sus_t, sus_d, rel;
+
 } ADSRMacro;
 
 typedef struct
 {
-    int top;
-    int bottom;
     uint8_t speed;
     lfowave wave;
-    uint16_t phase;
+    int16_t phase;
 } LFOMacro;
 
 typedef enum
@@ -48,8 +45,12 @@ typedef struct
     uint8_t delay;
     uint8_t step;
 
-    int *value;  // pointer to external int value controlled by this macro
-    uint8_t pos;
+    int value;
+    int16_t pos;
+    int16_t ival;
+    int top;
+    int bottom;
+    int8_t divcnt;
 
 } Macro;
 
@@ -70,18 +71,19 @@ void clearmacros(void)
 
 void sequencemacro(uint8_t ID, const int *sequence, uint8_t length, uint8_t looppoint, uint8_t releasepoint)
 {
-    if (ID >= MAX_MACROS) return;
+    if (ID >= MAX_MACROS)
+        return;
 
     macros[ID].type = MACRO_SEQUENCE;
     macros[ID].active = false; // initially inactive until started
     macros[ID].delay = 0;
     macros[ID].step = 0;
-    
 
     SequenceMacro *seq = &macros[ID].data.sequence;
 
     // Copy the sequence values, limit length to max 16
-    if (length > 16) length = 16;
+    if (length > 16)
+        length = 16;
     uint8_t i;
     for (i = 0; i < length; i++)
     {
@@ -96,7 +98,8 @@ void adsrmacro(uint8_t ID, int top, int bottom,
                uint8_t atk, uint8_t hld, uint8_t dcy,
                uint8_t sus, uint8_t sus_t, uint8_t sus_d, uint8_t rel)
 {
-    if (ID >= MAX_MACROS) return;
+    if (ID >= MAX_MACROS)
+        return;
 
     macros[ID].type = MACRO_ADSR;
     macros[ID].active = false;
@@ -105,8 +108,8 @@ void adsrmacro(uint8_t ID, int top, int bottom,
 
     ADSRMacro *adsr = &macros[ID].data.adsr;
 
-    adsr->top = top;
-    adsr->bottom = bottom;
+    macros[ID].top = top;
+    macros[ID].bottom = bottom;
     adsr->atk = atk;
     adsr->hld = hld;
     adsr->dcy = dcy;
@@ -118,7 +121,8 @@ void adsrmacro(uint8_t ID, int top, int bottom,
 
 void lfomacro(uint8_t ID, int top, int bottom, uint8_t speed, lfowave wave, uint16_t phase)
 {
-    if (ID >= MAX_MACROS) return;
+    if (ID >= MAX_MACROS)
+        return;
 
     macros[ID].type = MACRO_LFO;
     macros[ID].active = false;
@@ -127,8 +131,8 @@ void lfomacro(uint8_t ID, int top, int bottom, uint8_t speed, lfowave wave, uint
 
     LFOMacro *lfo = &macros[ID].data.lfo;
 
-    lfo->top = top;
-    lfo->bottom = bottom;
+    macros[ID].top = top;
+    macros[ID].bottom = bottom;
     lfo->speed = speed;
     lfo->wave = wave;
     lfo->phase = phase;
@@ -136,22 +140,23 @@ void lfomacro(uint8_t ID, int top, int bottom, uint8_t speed, lfowave wave, uint
 
 void globalparams(uint8_t ID, uint8_t delay, uint8_t step)
 {
-    if (ID >= MAX_MACROS) return;
+    if (ID >= MAX_MACROS)
+        return;
 
     macros[ID].delay = delay;
     macros[ID].step = step;
 }
 
-void startmacro(uint8_t ID, int *value)
+void startmacro(uint8_t ID)
 {
-    macros[ID].value = value;
+    macros[ID].ival = 0;
+    macros[ID].pos = 0;
     macros[ID].active = true;
     macros[ID].release = false;
 }
 
 void stopmacro(uint8_t ID)
 {
-    macros[ID].value = 0;
     macros[ID].active = false;
 }
 
@@ -160,25 +165,135 @@ void releasemacro(uint8_t ID)
     macros[ID].release = true;
 }
 
-void tickmacro(uint8_t ID) {
+void tickmacro(uint8_t ID)
+{
+    if (ID > MAX_MACROS)
+        return;
+    Macro *macro = &macros[ID];
+    ADSRMacro *adsr = &macro->data.adsr;
+    SequenceMacro *sequence = &macro->data.sequence;
+    LFOMacro *lfo = &macro->data.lfo;
+    uint16_t Pos;
+    int Value;
+    switch (macro->type)
+    {
+    case MACRO_SEQUENCE:
+        macro->value = sequence->sequence[macro->pos];
+        macro->pos++;
+        if (sequence->looppoint >= sequence->length && sequence->releasepoint < sequence->length && !macro->release)
+        {
+            macro->pos = sequence->releasepoint;
+        }
+        else if (sequence->looppoint < sequence->length && !macro->release)
+        {
+            macro->pos = sequence->looppoint;
+        }
 
+        if (macro->pos >= sequence->length)
+        {
+            macro->active = false;
+        }
+        break;
+    case MACRO_LFO:
+        Pos = (macro->pos + lfo->phase);
+        Pos &= 1023;
+        switch (lfo->wave)
+        {
+        case LFO_TRI:
+            macro->ival = ((Pos & 512) ? (1023 - Pos) : (Pos)) >> 1;
+            break;
+        case LFO_SAW:
+            macro->ival = Pos >> 2;
+            break;
+        case LFO_PUL:
+            macro->ival = (Pos & 512) ? 255 : 0;
+            break;
+        default:
+            break;
+        }
+
+        Value = macro->bottom + (((macro->top - macro->bottom) * macro->ival) >> 8);
+        macro->value = Value;
+        macro->pos += lfo->speed;
+        macro->pos &= 1023;
+        break;
+    case MACRO_ADSR:
+        switch (macro->pos) // pos is used as stage.
+        {
+        case 0: // Attack
+            macro->ival += adsr->atk;
+            if (macro->ival >= 255)
+            {
+                macro->ival = 255;
+                macro->pos = 1;
+                macro->divcnt = adsr->hld;
+            }
+            break;
+        case 1: // Hold
+            macro->divcnt--;
+            if (macro->divcnt == 0)
+            {
+                macro->pos = 2;
+            }
+            break;
+        case 2: // Decay
+            macro->ival -= adsr->dcy;
+            if (macro->ival > 255 || macro->ival <= adsr->sus)
+            {
+                macro->ival = adsr->sus;
+                macro->divcnt = adsr->sus_t;
+                macro->pos = 3;
+            }
+            break;
+        case 3: // Sustain
+            macro->divcnt--;
+            if (macro->divcnt == 0)
+            {
+                macro->pos = 4;
+            }
+            break;
+        case 4: // Decay After Sustain
+            macro->ival -= adsr->sus_d;
+            if (macro->ival > 255)
+            {
+                macro->ival = 0;
+                macro->pos = 6;
+            }
+            break;
+        case 5: // Release
+            macro->ival -= adsr->rel;
+            if (macro->ival > 255)
+            {
+                macro->ival = 0;
+                macro->pos = 6;
+            }
+            break;
+        case 6: // End
+            macro->active = false;
+            break;
+        default:
+            break;
+        }
+        macro->value = macro->bottom + (((macro->top - macro->bottom) * macro->ival) >> 8);
+        break;
+    default:
+        break;
+    }
 }
 
 void tickmacros(void)
 {
     uint8_t i;
-    for (i=0;1<MAX_MACROS;i++) {
-        if (macros[i].active) {
+    for (i = 0; i < MAX_MACROS; i++)
+    {
+        if (macros[i].active)
+        {
             tickmacro(i);
         }
     }
 }
 
-
-
-int getvalue(uint8_t ID) {
-    if (ID >= MAX_MACROS) return 0;          // bounds check
-    if (macros[ID].value == 0) return 0;  // avoid dereferencing NULL
-
-    return *(macros[ID].value);              // dereference pointer to get value
+int getvalue(uint8_t ID)
+{
+    return macros[ID].value;
 }

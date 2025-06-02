@@ -108,7 +108,7 @@ void fade(void (*callback)(void)) {
 }
 
 static void setup(void) {
-    stop(1);
+    stopall();
     set_bkg_data(1,44,Logoimg);
     set_win_data(45,23,menu);
     set_bkg_tiles(0,0,32,32,blank);
@@ -117,7 +117,7 @@ static void setup(void) {
     SCX_REG = 0;
     SCY_REG = 64;
     HIDE_SPRITES;
-    play(0);
+    play(2);
 }
 
 void domenu(void) {

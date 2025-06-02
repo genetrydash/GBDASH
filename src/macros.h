@@ -28,7 +28,7 @@ void lfomacro(uint8_t ID, int top, int bottom, uint8_t speed, lfowave wave, uint
 void globalparams(uint8_t ID, uint8_t delay, uint8_t step);
 
 // Start macro with given ID and attach value pointer
-void startmacro(uint8_t ID, int* value);
+void startmacro(uint8_t ID);
 
 // Stop macro with given ID
 void stopmacro(uint8_t ID);
@@ -38,5 +38,8 @@ void releasemacro(uint8_t ID);
 
 // Process all active macros per tick
 void tickmacros(void);
+
+// Get Current Value of a macro
+int getvalue(uint8_t ID);
 
 #endif // MACROS_H

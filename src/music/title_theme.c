@@ -3241,12 +3241,12 @@ const hUGESong_t title_theme = {2, &order_cnt, order1, order2, order3,order4, du
 extern const hUGESong_t title_theme;
 
 
-void tick(void) {
+static void tick(void) {
     hUGE_dosound();
 }
 
 
-void music_init1(void) {
+static void music_init1(void) {
 NR52_REG = 0x80; // Enable sound
 NR50_REG = 0xFF; // Maximum volume
 NR51_REG = 0xFF; // Enable all channels
@@ -3259,7 +3259,7 @@ NR51_REG = 0xFF; // Enable all channels
     initirq();
 }
 
-void stopandclean1(void) {
+static void stopandclean1(void) {
     settickcallback(0);
     closeirq();
     

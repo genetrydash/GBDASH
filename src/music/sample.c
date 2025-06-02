@@ -53,7 +53,7 @@ void beat(void)
 }
 
 
-void init(void) {
+static void init(void) {
     currentbeat = 0;
     setenable(1);
     setmastervolume(7, 7);
@@ -74,7 +74,7 @@ void init(void) {
     initirq();
 }
 
-void stopandclean(void) {
+static void stopandclean(void) {
     setenable(0);
     setbeatcallback(0);
     closeirq();
