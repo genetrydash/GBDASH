@@ -1,82 +1,50 @@
 #include "register.h"
 #include "audio_driver.h"
 #include "heartbeat.h"
+#include "macros.h"
+#include "notes.h"
 
 unsigned char wave_data[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9};
-int currentbeat = 0;
+int currentbeat, divc = 0;
 
-void beat(void)
+static void beat(void)
 {
-    if (currentbeat % 2 == 0)
-    {
-        setsweep(SWEEP_DOWN, 3, 1);
-        setlengthandduty(SOUND_PULSE1, 64, 2);
-        setfreq(SOUND_PULSE1, 262);
-        setenvolope(SOUND_PULSE1, 0, 15, 1);
-    }
-
-    if ((currentbeat + 1) % 2 == 0)
-    {
-        setenvolope(SOUND_PULSE1, 0, 15, 1);
-        setlengthandduty(SOUND_PULSE1, 64, 1);
-        setsweep(SWEEP_DOWN, 0, 0);
-        if ((currentbeat + 1) % 4 == 0)
-        {
-            if ((currentbeat) % 32 >= 16)
-            {
-                setfreq(SOUND_PULSE1, 117);
-            }
-            else
-            {
-                setfreq(SOUND_PULSE1, 138);
-            }
-        }
-        else if ((currentbeat + 1) % 32 >= 16)
-        {
-            setfreq(SOUND_PULSE1, 104);
-        }
-        else
-        {
-            setfreq(SOUND_PULSE1, 130);
-        }
-    }
-
-    if ((currentbeat) % 32 == 16)
-    {
-        setfreq(SOUND_WAVE, 52);
-    }
-    else if ((currentbeat) % 32 == 0)
-    {
-        setfreq(SOUND_WAVE, 65);
-    }
+    startmacro(0);
     currentbeat++;
 }
 
+static void tick() {
+    divc++;
+    if (divc%6==0) {
+        tickmacros();
+    setpitch(SOUND_WAVE,getvalue(0));
+    }
+    
+}
 
 static void init(void) {
     currentbeat = 0;
+    divc = 6;
     setenable(1);
     setmastervolume(7, 7);
-    setpan(SOUND_PULSE1, CHANNEL_BOTH);
     setpan(SOUND_WAVE, CHANNEL_BOTH);
-    setlengthandduty(SOUND_PULSE1, 64, 2);
-    setlengthandduty(SOUND_PULSE2, 64, 1);
 
-    setfreq(SOUND_PULSE1, 262);
-    setsweep(SWEEP_DOWN, 3, 1);
-    setenvolope(SOUND_PULSE1, 0, 15, 1);
     setwave(wave_data);
     setvolume(SOUND_WAVE, 1);
 
+    adsrmacro(0,C5,C4,255,0,20,0,0,0,255);
+
     setbeatcallback(beat);
+    settickcallback(tick);
     settickrate(360);
-    setbpm(140*2);
+    setbpm(170);
     initirq();
 }
 
 static void stopandclean(void) {
     setenable(0);
     setbeatcallback(0);
+    settickcallback(0);
     closeirq();
 }
 
