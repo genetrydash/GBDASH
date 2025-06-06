@@ -212,8 +212,8 @@ void tickmacro(uint8_t ID)
             break;
         }
 
-        Value = macro->bottom + (((macro->top - macro->bottom) * macro->ival) >> 8);
-        macro->value = Value;
+        macro->value = macro->bottom + (int16_t)(((int32_t)(macro->top - macro->bottom) * macro->ival) >> 8);
+
         macro->pos += lfo->speed;
         macro->pos &= 1023;
         break;
@@ -274,7 +274,7 @@ void tickmacro(uint8_t ID)
         default:
             break;
         }
-        macro->value = macro->bottom + (((macro->top - macro->bottom) * macro->ival) >> 8);
+        macro->value = macro->bottom + (int16_t)(((int32_t)(macro->top - macro->bottom) * macro->ival) >> 8);
         break;
     default:
         break;

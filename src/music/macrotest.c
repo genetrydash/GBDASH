@@ -6,7 +6,7 @@
 
 static void tick(void) {
     tickmacros();
-    setfreq(SOUND_WAVE,getvalue(0));
+    setpitch(SOUND_WAVE,getvalue(0));
     setlengthandduty(SOUND_WAVE,0,2);
 }
 
@@ -18,7 +18,7 @@ static void init(void) {
     setenable(1);
     setmastervolume(7,7);
     setpan(SOUND_WAVE,CHANNEL_BOTH);
-    lfomacro(0,131,65,10,LFO_TRI,0);
+    lfomacro(0,2000,0,10,LFO_TRI,0);
     startmacro(0);
     setwave(wave);
     setvolume(SOUND_WAVE,1);
