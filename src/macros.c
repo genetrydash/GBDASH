@@ -173,26 +173,33 @@ void tickmacro(uint8_t ID)
     ADSRMacro *adsr = &macro->data.adsr;
     SequenceMacro *sequence = &macro->data.sequence;
     LFOMacro *lfo = &macro->data.lfo;
-    uint16_t Pos;
-    int Value;
+    uint16_t Pos = 0;
+    char sloopvalid = sequence->looppoint < sequence->length;
+    char srelvalid = sequence->releasepoint < sequence->length;
     switch (macro->type)
     {
     case MACRO_SEQUENCE:
-        macro->value = sequence->sequence[macro->pos];
-        macro->pos++;
-        if (sequence->looppoint >= sequence->length && sequence->releasepoint < sequence->length && !macro->release)
+        Pos = macro->pos;
+        if (Pos > sequence->length || Pos > sequence->releasepoint)
         {
-            macro->pos = sequence->releasepoint;
+            if (!sloopvalid && srelvalid && !macro->release)
+            {
+                Pos = sequence->releasepoint;
+            }
+            else if (sloopvalid && !macro->release)
+            {
+                Pos = sequence->looppoint;
+            }
+            else if (Pos >= sequence->length)
+            {
+                macro->active = false;
+            }
+        } else {
+            Pos++;
         }
-        else if (sequence->looppoint < sequence->length && !macro->release)
-        {
-            macro->pos = sequence->looppoint;
-        }
-
-        if (macro->pos >= sequence->length)
-        {
-            macro->active = false;
-        }
+        
+        macro->value = sequence->sequence[Pos];
+        macro->pos = Pos;
         break;
     case MACRO_LFO:
         Pos = (macro->pos + lfo->phase);
@@ -218,6 +225,8 @@ void tickmacro(uint8_t ID)
         macro->pos &= 1023;
         break;
     case MACRO_ADSR:
+        if (macro->pos != 5 && macro->release)
+            macro->pos = 5;
         switch (macro->pos) // pos is used as stage.
         {
         case 0: // Attack
