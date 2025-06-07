@@ -50,7 +50,7 @@ typedef struct
     int16_t ival;
     int top;
     int bottom;
-    int8_t divcnt;
+    int16_t divcnt;
 
 } Macro;
 
@@ -66,6 +66,7 @@ void clearmacros(void)
         macros[i].type = MACRO_NONE;
         macros[i].delay = 0;
         macros[i].step = 0;
+        macros[i].pos = 0;
     }
 }
 
@@ -225,56 +226,59 @@ void tickmacro(uint8_t ID)
         macro->pos &= 1023;
         break;
     case MACRO_ADSR:
-        if (macro->pos != 5 && macro->release)
-            macro->pos = 5;
-        switch (macro->pos) // pos is used as stage.
+        Pos = macro->pos;
+        if (Pos != 5 && macro->release)
+            Pos = 5;
+        switch (Pos) // pos is used as stage.
         {
         case 0: // Attack
             macro->ival += adsr->atk;
             if (macro->ival >= 255)
             {
                 macro->ival = 255;
-                macro->pos = 1;
+                Pos = 1;
                 macro->divcnt = adsr->hld;
             }
             break;
         case 1: // Hold
-            macro->divcnt--;
+            
             if (macro->divcnt == 0)
             {
-                macro->pos = 2;
+                Pos = 2;
             }
+            macro->divcnt--;
             break;
         case 2: // Decay
             macro->ival -= adsr->dcy;
-            if (macro->ival > 255 || macro->ival <= adsr->sus)
+            if (macro->ival <= adsr->sus)
             {
                 macro->ival = adsr->sus;
                 macro->divcnt = adsr->sus_t;
-                macro->pos = 3;
+                Pos = 3;
             }
             break;
         case 3: // Sustain
-            macro->divcnt--;
+            
             if (macro->divcnt == 0)
             {
-                macro->pos = 4;
+                Pos = 4;
             }
+            macro->divcnt--;
             break;
         case 4: // Decay After Sustain
             macro->ival -= adsr->sus_d;
-            if (macro->ival > 255)
+            if (macro->ival < 0)
             {
                 macro->ival = 0;
-                macro->pos = 6;
+                Pos = 6;
             }
             break;
         case 5: // Release
             macro->ival -= adsr->rel;
-            if (macro->ival > 255)
+            if (macro->ival < 0)
             {
                 macro->ival = 0;
-                macro->pos = 6;
+                Pos = 6;
             }
             break;
         case 6: // End
@@ -284,6 +288,7 @@ void tickmacro(uint8_t ID)
             break;
         }
         macro->value = macro->bottom + (int16_t)(((int32_t)(macro->top - macro->bottom) * macro->ival) >> 8);
+        macro->pos = Pos;
         break;
     default:
         break;

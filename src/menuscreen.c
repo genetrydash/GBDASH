@@ -117,7 +117,7 @@ static void setup(void) {
     SCX_REG = 0;
     SCY_REG = 64;
     HIDE_SPRITES;
-    play(2);
+    play(0);
 }
 
 void domenu(void) {

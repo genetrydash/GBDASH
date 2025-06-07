@@ -1,72 +1,152 @@
-#define C3 44
-#define Cs3 156
-#define D3 262
-#define Ds3 363
-#define E3 457
-#define F3 547
-#define Fs3 631
-#define G3 710
-#define Gs3 786
-#define A3 854
-#define As3 923
-#define B3 986
-#define C4 1046
-#define Cs4 1102
-#define D4 1155
-#define Ds4 1205
-#define E4 1253
-#define F4 1297
-#define Fs4 1339
-#define G4 1379
-#define Gs4 1417
-#define A4 1452
-#define As4 1486
-#define B4 1517
-#define C5 1546
-#define Cs5 1575
-#define D5 1602
-#define Ds5 1627
-#define E5 1650
-#define F5 1673
-#define Fs5 1694
-#define G5 1714
-#define Gs5 1732
-#define A5 1750
-#define As5 1767
-#define B5 1783
-#define C6 1798
-#define Cs6 1812
-#define D6 1825
-#define Ds6 1837
-#define E6 1849
-#define F6 1860
-#define Fs6 1871
-#define G6 1881
-#define Gs6 1890
-#define A6 1899
-#define As6 1907
-#define B6 1915
-#define C7 1923
-#define Cs7 1930
-#define D7 1936
-#define Ds7 1943
-#define E7 1949
-#define F7 1954
-#define Fs7 1959
-#define G7 1964
-#define Gs7 1969
-#define A7 1974
-#define As7 1978
-#define B7 1982
-#define C8 1985
-#define Cs8 1988
-#define D8 1992
-#define Ds8 1995
-#define E8 1998
-#define F8 2001
-#define Fs8 2004
-#define G8 2006
-#define Gs8 2009
-#define A8 2011
-#define As8 2013
-#define B8 2015
+// Note number definitions
+#define C_3 0
+#define Cs3 1
+#define D_3 2
+#define Ds3 3
+#define E_3 4
+#define F_3 5
+#define Fs3 6
+#define G_3 7
+#define Gs3 8
+#define A_3 9
+#define As3 10
+#define B_3 11
+#define C_4 12
+#define Cs4 13
+#define D_4 14
+#define Ds4 15
+#define E_4 16
+#define F_4 17
+#define Fs4 18
+#define G_4 19
+#define Gs4 20
+#define A_4 21
+#define As4 22
+#define B_4 23
+#define C_5 24
+#define Cs5 25
+#define D_5 26
+#define Ds5 27
+#define E_5 28
+#define F_5 29
+#define Fs5 30
+#define G_5 31
+#define Gs5 32
+#define A_5 33
+#define As5 34
+#define B_5 35
+#define C_6 36
+#define Cs6 37
+#define D_6 38
+#define Ds6 39
+#define E_6 40
+#define F_6 41
+#define Fs6 42
+#define G_6 43
+#define Gs6 44
+#define A_6 45
+#define As6 46
+#define B_6 47
+#define C_7 48
+#define Cs7 49
+#define D_7 50
+#define Ds7 51
+#define E_7 52
+#define F_7 53
+#define Fs7 54
+#define G_7 55
+#define Gs7 56
+#define A_7 57
+#define As7 58
+#define B_7 59
+#define C_8 60
+#define Cs8 61
+#define D_8 62
+#define Ds8 63
+#define E_8 64
+#define F_8 65
+#define Fs8 66
+#define G_8 67
+#define Gs8 68
+#define A_8 69
+#define As8 70
+#define B_8 71
+#define ___ 90
+#define OFF 91
+#define REL 92
+
+// Corresponding pitch values
+int pitch_table[] = {
+    44,   // C3
+    156,  // Cs3
+    262,  // D3
+    363,  // Ds3
+    457,  // E3
+    547,  // F3
+    631,  // Fs3
+    710,  // G3
+    786,  // Gs3
+    854,  // A3
+    923,  // As3
+    986,  // B3
+    1046, // C4
+    1102, // Cs4
+    1155, // D4
+    1205, // Ds4
+    1253, // E4
+    1297, // F4
+    1339, // Fs4
+    1379, // G4
+    1417, // Gs4
+    1452, // A4
+    1486, // As4
+    1517, // B4
+    1546, // C5
+    1575, // Cs5
+    1602, // D5
+    1627, // Ds5
+    1650, // E5
+    1673, // F5
+    1694, // Fs5
+    1714, // G5
+    1732, // Gs5
+    1750, // A5
+    1767, // As5
+    1783, // B5
+    1798, // C6
+    1812, // Cs6
+    1825, // D6
+    1837, // Ds6
+    1849, // E6
+    1860, // F6
+    1871, // Fs6
+    1881, // G6
+    1890, // Gs6
+    1899, // A6
+    1907, // As6
+    1915, // B6
+    1923, // C7
+    1930, // Cs7
+    1936, // D7
+    1943, // Ds7
+    1949, // E7
+    1954, // F7
+    1959, // Fs7
+    1964, // G7
+    1969, // Gs7
+    1974, // A7
+    1978, // As7
+    1982, // B7
+    1985, // C8
+    1988, // Cs8
+    1992, // D8
+    1995, // Ds8
+    1998, // E8
+    2001, // F8
+    2004, // Fs8
+    2006, // G8
+    2009, // Gs8
+    2011, // A8
+    2013, // As8
+    2015,  // B8
+};

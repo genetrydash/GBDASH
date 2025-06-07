@@ -1,4 +1,5 @@
 #include "audio_driver.h"
+#include <stdint.h>
 #define REG(addr) (*(volatile unsigned char *)(addr))
 
 static int freq_to_timer(int freq_hz, char iswave)
@@ -158,29 +159,46 @@ void setvolume(Sound_Channel channel, char volume)
     switch (channel)
     {
     case SOUND_PULSE1:
-        // NR14: preserve bits 0-5, update bit 6 (length enable) and bit 7 (trigger)
-        REG(0xFF12) = (volume & 0b1111) << 4;
+    {
+        // NR12: bits 4-7 = initial volume, bits 0-3 = envelope settings
+        uint8_t current = REG(0xFF12);
+        current = (current & 0x0F) | ((volume & 0x0F) << 4); // Preserve bits 0–3
+        REG(0xFF12) = current;
         break;
+    }
 
     case SOUND_PULSE2:
-        // NR24
-        REG(0xFF17) = (volume & 0b1111) << 4;
+    {
+        // NR22
+        uint8_t current = REG(0xFF17);
+        current = (current & 0x0F) | ((volume & 0x0F) << 4);
+        REG(0xFF17) = current;
         break;
+    }
 
     case SOUND_WAVE:
-        // NR34
-        REG(0xFF1C) = (volume & 0b11) << 5;
+    {
+        // NR32: bits 5-6 control output level; only 2 bits used
+        uint8_t current = REG(0xFF1C);
+        current = (current & 0x9F) | ((volume & 0x03) << 5); // Preserve bits 0–4 and 7
+        REG(0xFF1C) = current;
         break;
+    }
 
     case SOUND_NOISE:
-        // NR44
-        REG(0xFF21) = (volume & 0b1111) << 4;
+    {
+        // NR42
+        uint8_t current = REG(0xFF21);
+        current = (current & 0x0F) | ((volume & 0x0F) << 4);
+        REG(0xFF21) = current;
         break;
+    }
 
     default:
         break;
     }
 }
+
 int _i = 0;
 void setwave(const unsigned char *samples_4bit)
 {

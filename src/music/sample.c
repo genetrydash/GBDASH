@@ -4,7 +4,7 @@
 #include "macros.h"
 #include "notes.h"
 
-unsigned char wave_data[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9};
+unsigned char wave_data[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
 int currentbeat, divc = 0;
 
 static void beat(void)
@@ -13,13 +13,13 @@ static void beat(void)
     currentbeat++;
 }
 
-static void tick() {
-    divc++;
+static void tick(void) {
+    
     if (divc%6==0) {
         tickmacros();
-    setpitch(SOUND_WAVE,getvalue(0));
+        setpitch(SOUND_WAVE,getvalue(0));
     }
-    
+    divc++;
 }
 
 static void init(void) {
@@ -32,12 +32,12 @@ static void init(void) {
     setwave(wave_data);
     setvolume(SOUND_WAVE, 1);
 
-    adsrmacro(0,C5,C4,255,0,20,0,0,0,255);
+    adsrmacro(0,pitch_table[C_6],pitch_table[C_3],255,0,10,0,0,0,255);
 
     setbeatcallback(beat);
     settickcallback(tick);
     settickrate(360);
-    setbpm(170);
+    setbpm(120);
     initirq();
 }
 
