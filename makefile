@@ -28,9 +28,6 @@ OBJECTS       := $(SRC_OBJECTS) $(MUSIC_OBJECTS)
 
 TARGET := $(BUILD_DIR)/game.gb
 
-# Detect OS
-UNAME_S := $(shell uname -s)
-
 # Default rule
 all: run_processtotxt prebuild $(TARGET)
 
