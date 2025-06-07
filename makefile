@@ -36,7 +36,7 @@ all: run_processtotxt prebuild $(TARGET)
 
 # Run processtotxt.py before build
 run_processtotxt:
-	python3 processtotxt.py
+	python processtotxt.py
 
 # Link final binary
 $(TARGET): $(OBJECTS)
