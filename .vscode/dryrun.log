@@ -1,0 +1,32 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: se ingresa al directorio `c:/Users/Toshiba/Documents/GBDASH-maindd/GBDASH'
+python processtotxt.py
+mkdir -p build
+mkdir -p build/music
+lcc -Iinclude -Isrc -c -debug -o build/audio_driver.o src/audio_driver.c
+lcc -Iinclude -Isrc -c -debug -o build/driverhelper.o src/driverhelper.c
+lcc -Iinclude -Isrc -c -debug -o build/heartbeat.o src/heartbeat.c
+lcc -Iinclude -Isrc -c -debug -o build/level.o src/level.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/logo.o src/logo.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/macros.o src/macros.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/main.o src/main.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/menu.o src/menu.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/menuscreen.o src/menuscreen.c
+ 
+lcc -Iinclude -Isrc -c -debug -o build/notes.o src/notes.c
+lcc -Iinclude -Isrc -c -debug -o build/physics.o src/physics.c
+lcc -Iinclude -Isrc -c -debug -o build/register.o src/register.c
+lcc -Iinclude -Isrc -c -debug -o build/registry.o src/registry.c
+lcc -Iinclude -Isrc -c -debug -o build/music/sample.o src/music/sample.c
+lcc -Iinclude -Isrc -c -debug -o build/music/stereomadness.o src/music/stereomadness.c
+lcc -Iinclude -Isrc -c -debug -o build/music/title_theme.o src/music/title_theme.c
+lcc -Iinclude -Isrc -Wl-lhugedriver/gbdk/hUGEDriver.lib -Wl-yt19 -Wl-yo8 -debug -o build/game.gb build/audio_driver.o build/driverhelper.o build/heartbeat.o build/level.o build/logo.o build/macros.o build/main.o build/menu.o build/menuscreen.o build/notes.o build/physics.o build/register.o build/registry.o build/music/sample.o build/music/stereomadness.o build/music/title_theme.o
+make.exe: se sale del directorio `c:/Users/Toshiba/Documents/GBDASH-maindd/GBDASH'
+ 
+process_begin: CreateProcess(NULL, uname -s, ...) failed.
+
