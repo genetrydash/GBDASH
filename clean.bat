@@ -1,5 +1,5 @@
 @echo off
-echo Limpiando archivos de compilación...
+echo Cleaning All Compiled Files...
 rmdir /s /q build
-echo Limpieza completada.
-pause
+echo Cleaning Complete.
+pause 
