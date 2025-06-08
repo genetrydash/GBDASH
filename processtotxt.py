@@ -3,8 +3,16 @@ import sys
 import subprocess
 import platform
 
+
+def clear_terminal():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+
 input_dir = "music/modules"
 output_dir = "music/txt"
+burner = subprocess.DEVNULL
 
 # Clear output_dir before running
 if os.path.isdir(output_dir):
@@ -37,10 +45,10 @@ for exe_path in [furnace_path, lsdj2txt_path]:
 
 def furnace(input_file, output_file):
     subprocess.run(
-        [furnace_path, "-txtout", output_file, "-noreport", input_file],
+        [furnace_path, "-txtout", output_file, "-noreport", input_file, "-loglevel", "error"],
         check=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stdout=burner,
+        stderr=burner
     )
 
 def lsdj(input_file, output_file):
@@ -49,7 +57,7 @@ def lsdj(input_file, output_file):
             [lsdj2txt_path, input_file],
             check=True,
             stdout=out_file,
-            stderr=subprocess.PIPE
+            stderr=burner
         )
 
 if not os.path.isdir(input_dir):
@@ -76,8 +84,15 @@ for filename in os.listdir(input_dir):
 
     try:
         if prefix == "fur":
+            clear_terminal()
+            print(f'Processing Furnace Module {base}')
             furnace(filepath, output_path)
         else:
+            clear_terminal()
+            print(f'Processing LSDJ Module {base}')
             lsdj(filepath, output_path)
     except subprocess.CalledProcessError as e:
         print(f"Error processing '{filename}': {e}")
+
+clear_terminal()
+print("Done Processing")
