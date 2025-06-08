@@ -9,7 +9,7 @@ set BUILD_DIR=build
 set BUILD_MUSIC_DIR=%BUILD_DIR%\music
 
 :: Herramientas y flags
-set CC=lcc
+set CC=gbdk\bin\lcc
 set CFLAGS=-I%INC_DIR% -I%SRC_DIR% -c -debug
 set ROM_TITLE=GB_DASH
 set LDFLAGS=-I%INC_DIR% -I%SRC_DIR% -Wl-lhugedriver/gbdk/hUGEDriver.lib -Wl-yt19 -Wl-yo8 -debug
@@ -63,5 +63,4 @@ if errorlevel 1 (
 )
 
 echo Compilación completada exitosamente.
-exit /b 0
 pause
