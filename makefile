@@ -58,22 +58,22 @@ run_processtotxt:
 
 # Link final binary
 $(TARGET): $(OBJECTS)
-	@$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 # Compile each .c to .o
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	@$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 $(BUILD_MUSIC_DIR)/%.o: $(MUSIC_DIR)/%.c | $(BUILD_DIR)
-	@$(CC) $(CFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 # Ensure build directories exist
 $(BUILD_DIR):
-	@$(MKDIR_P) $(BUILD_DIR)
-	@$(MKDIR_P) $(BUILD_MUSIC_DIR)
+	$(MKDIR_P) $(BUILD_DIR)
+	$(MKDIR_P) $(BUILD_MUSIC_DIR)
 
 # Clean build files
 clean:
-	@$(RM_RF) $(BUILD_DIR)
+	$(RM_RF) $(BUILD_DIR)
 
 .PHONY: all clean prebuild run_processtotxt
