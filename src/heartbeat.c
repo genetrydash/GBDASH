@@ -61,6 +61,49 @@ void setbpm(int bpm) {
     beatinterval = (tickrate * 60) / bpm;
 }
 
+
+unsigned int mul16_8(unsigned int value, unsigned char multiplier) {
+    unsigned int result = 0;
+
+    while (multiplier) {
+        if (multiplier & 1) {
+            result += value;
+        }
+        value <<= 1;
+        multiplier >>= 1;
+    }
+
+    return result;
+}
+
+
+
+unsigned int div16_8(unsigned int dividend, unsigned char divisor) {
+    unsigned int quotient = 0;
+    unsigned int bit = 1;
+    unsigned int denom = divisor;
+
+    // Shift left until denom just <= dividend
+    while ((denom << 1) <= dividend && (denom << 1) > denom) {
+        denom <<= 1;
+        bit <<= 1;
+    }
+
+    while (bit != 0) {
+        if (dividend >= denom) {
+            dividend -= denom;
+            quotient |= bit;
+        }
+        denom >>= 1;
+        bit >>= 1;
+    }
+
+    return quotient;
+}
+
+
+
+
 // Set the tick rate as close as possible to `rate`
 void settickrate(unsigned int rate) {
     unsigned char best_interval = 1;
@@ -71,9 +114,9 @@ void settickrate(unsigned int rate) {
     // Limit interval range to 8..128
     for (i = 0; i < 4; i++) {
         unsigned int base_freq = timer_freqs[i];
-        unsigned int interval;
+        unsigned char interval;
         for (interval = 8; interval <= 200; interval++) {
-            unsigned int est_target = rate * interval;
+            unsigned int est_target = mul16_8(rate,interval);
             unsigned int error = (base_freq > est_target)
                                 ? base_freq - est_target
                                 : est_target - base_freq;
@@ -82,7 +125,7 @@ void settickrate(unsigned int rate) {
                 best_error = error;
                 best_interval = interval;
                 best_tac = tac_values[i];
-                tickrate = base_freq / interval;
+                tickrate = div16_8(base_freq,interval);
 
                 // Optional: break early if very close
                 if (error == 0) goto done;
