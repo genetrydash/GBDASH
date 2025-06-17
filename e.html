@@ -1,0 +1,35 @@
+<script>
+    // Example: 32 samples of 4-bit waveform (values 0–15)
+const waveRAM = [
+  15, 12, 9, 6, 3, 0, 3, 6,
+  9, 12, 15, 12, 9, 6, 3, 0,
+  3, 6, 9, 12, 15, 12, 9, 6,
+  3, 0, 3, 6, 9, 12, 15, 12
+];
+const floatWave = new Float32Array(waveRAM.length);
+for (let i = 0; i < waveRAM.length; i++) {
+  floatWave[i] = (waveRAM[i] / 15) * 2 - 1;
+}
+function playWavetable(freq = 440, duration = 1) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const buffer = audioCtx.createBuffer(1, floatWave.length, audioCtx.sampleRate);
+  buffer.copyToChannel(floatWave, 0);
+
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+
+  // Calculate playbackRate to get desired pitch:
+  // freq = (playbackRate * sampleRate) / buffer.length
+  source.playbackRate.value = freq / (audioCtx.sampleRate / floatWave.length);
+
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.2, audioCtx.currentTime); // moderate volume
+
+  source.connect(gain).connect(audioCtx.destination);
+  source.start();
+  source.stop(audioCtx.currentTime + duration);
+}
+
+
+</script>

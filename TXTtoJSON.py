@@ -54,13 +54,16 @@ def parsefurtext(txt_file, json_file):
 
         currentintr = 0
         key = ""
+        hws = []
         while True:
             
             e = input.readline()
             if e.startswith("## "):
                 print(f'Instrument {e[3:].strip()}')
+                
                 currentintr = int(e[3:].split()[0].rstrip(":"), 16)
                 instruments.append({})
+                hws = []
 
             if e.startswith("- type: "):
                 if not e[len("- type: "):].startswith("2"):
@@ -75,10 +78,12 @@ def parsefurtext(txt_file, json_file):
                 instruments[currentintr][key] = {}
 
             if e.startswith("- macros:"):
+                if hws:
+                    instruments[currentintr][key]["hardware sequence"] = hws
                 key = "macros"
                 instruments[currentintr][key] = {}
 
-            if e.startswith("  - "):
+            if e.startswith("  - ") and not e.startswith("  - hardware sequence:"):
                 temp1 = e[4:]
                 k = temp1[0:temp1.find(": ")].strip()
                 v = temp1[temp1.find(": ")+2:].strip()
@@ -88,8 +93,11 @@ def parsefurtext(txt_file, json_file):
                     v = False
                 elif (v.isnumeric()):
                     v = int(v)
-
                 instruments[currentintr][key][k] = v
+
+            if e.startswith("    - "):
+                temp1 = e[len("    - "):].strip()
+                hws.append(temp1.split(" "))
 
             if e.startswith("# Wavetables"):
                 break
@@ -100,7 +108,7 @@ def parsefurtext(txt_file, json_file):
             e = input.readline()
 
             if e.startswith("- "):
-                w = e[len("- 0 (32x16): "):]
+                w = e[len("- 0 (32x16): "):].strip()
                 wavetables.append(w.split(" "))
 
             if e.startswith("# Samples"):
@@ -126,7 +134,12 @@ def parsefurtext(txt_file, json_file):
                 k = p[0].replace(" ","")
                 v = p[1].replace(" ","")
 
-                songproperties[k] = v
+                if k == "speeds":
+                    songproperties[k] = v.split(" ")
+                elif k == "virtualtempo":
+                    songproperties[k] = v.split("/")
+                else:
+                    songproperties[k] = v
 
             if e.startswith("orders:"):
                 break
@@ -172,7 +185,7 @@ def parsefurtext(txt_file, json_file):
                 p = e.split("|")
                 
                 for i in range(4):
-                    r = p[i+1].split(" ")
+                    r = p[i+1].strip().split(" ")
                     d = {}
                     if r[0] != "...":
                         d["Note"] = r[0]
@@ -186,7 +199,8 @@ def parsefurtext(txt_file, json_file):
                     if not all(x == "...." for x in r[3:]):
                         d["Effects"] = []
                         for e in r[3:]:
-                            d["Effects"].append(e)
+                            if e != "....":
+                                d["Effects"].append(e)
                     rows[i+1].append(d)
                     
 
@@ -210,6 +224,7 @@ def parsefurtext(txt_file, json_file):
 
         dd = {}
         dd["Name"] = name
+        dd["Properties"] = songproperties
         dd["Instruments"] = instruments
         dd["Wavetables"] = wavetables
         dd["Orders"] = orders
@@ -219,4 +234,4 @@ def parsefurtext(txt_file, json_file):
 
 
 
-parsefurtext("music/txt/fur_dsads.txt","music/json/fur_dsads.json")
+parsefurtext("music/txt/fur_On_Hold.txt","fur.json")
