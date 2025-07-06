@@ -172,57 +172,63 @@ def parsefurtext(txt_file, json_file):
             if e.strip() == "## Patterns":
                 break
 
-        print("Reading Patterns")
+                print("Reading Patterns")
         currentorder = -1
-        patterns = {1:[], 2:[], 3:[], 4:[]}
+        patterns = {1: [], 2: [], 3: [], 4: []}
+        seen_patterns = {1: {}, 2: {}, 3: {}, 4: {}}
+
         while True:
             e = input.readline()
-            
 
+            if e.startswith("----- ORDER "):
+                if currentorder != -1:
+                    for ch in range(1, 5):
+                        pat_num = orders[currentorder][ch - 1]
+                        pattern_data = rows[ch]
+                        hash_key = json.dumps(pattern_data, sort_keys=True)
 
-            if "|" in e and currentorder != -1:
-                
+                        if pat_num not in seen_patterns[ch]:
+                            seen_patterns[ch][pat_num] = hash_key
+                            patterns[ch].append({"Pattern": pat_num, "Rows": pattern_data})
+                        elif seen_patterns[ch][pat_num] != hash_key:
+                            # Same pattern number used with different data – keep both
+                            patterns[ch].append({"Pattern": pat_num, "Rows": pattern_data})
+
+                rows = {1: [], 2: [], 3: [], 4: []}
+                currentorder = int(e[len("----- ORDER "):], 16)
+
+            elif "|" in e and currentorder != -1:
                 p = e.split("|")
-                
                 for i in range(4):
-                    r = p[i+1].strip().split(" ")
+                    r = p[i + 1].strip().split(" ")
                     d = {}
                     if r[0] != "...":
                         d["Note"] = r[0]
-
                     if r[1] != "..":
                         d["Intrument"] = r[1]
-
                     if r[2] != "..":
                         d["Volume"] = r[2]
-
                     if not all(x == "...." for x in r[3:]):
-                        d["Effects"] = []
-                        for e in r[3:]:
-                            if e != "....":
-                                d["Effects"].append(e)
-                    rows[i+1].append(d)
-                    
+                        d["Effects"] = [x for x in r[3:] if x != "...."]
+                    rows[i + 1].append(d)
 
-            if e.startswith("----- ORDER "):
-                
+            elif e == "":
                 if currentorder != -1:
-                    patterns[1].append({"Pattern": orders[currentorder][0], "Rows": rows[1]})
-                    patterns[2].append({"Pattern": orders[currentorder][1], "Rows": rows[2]})
-                    patterns[3].append({"Pattern": orders[currentorder][2], "Rows": rows[3]})
-                    patterns[4].append({"Pattern": orders[currentorder][3], "Rows": rows[4]})
-                rows = {1:[], 2:[], 3:[], 4:[]}
-                currentorder = int(e[len("----- ORDER "):],16)
+                    for ch in range(1, 5):
+                        pat_num = orders[currentorder][ch - 1]
+                        pattern_data = rows[ch]
+                        hash_key = json.dumps(pattern_data, sort_keys=True)
 
-            if e == "":
-                if currentorder != -1:
-                    patterns[1].append({"Pattern": orders[currentorder][0], "Rows": rows[1]})
-                    patterns[2].append({"Pattern": orders[currentorder][1], "Rows": rows[2]})
-                    patterns[3].append({"Pattern": orders[currentorder][2], "Rows": rows[3]})
-                    patterns[4].append({"Pattern": orders[currentorder][3], "Rows": rows[4]})
+                        if pat_num not in seen_patterns[ch]:
+                            seen_patterns[ch][pat_num] = hash_key
+                            patterns[ch].append({"Pattern": pat_num, "Rows": pattern_data})
+                        elif seen_patterns[ch][pat_num] != hash_key:
+                            patterns[ch].append({"Pattern": pat_num, "Rows": pattern_data})
                 break
 
+
         dd = {}
+        dd["PlayerType"] = 0
         dd["Name"] = name
         dd["Properties"] = songproperties
         dd["Instruments"] = instruments
@@ -234,4 +240,4 @@ def parsefurtext(txt_file, json_file):
 
 
 
-parsefurtext("music/txt/fur_On_Hold.txt","fur.json")
+parsefurtext("music/txt/fur_freedom.txt","fur.json")
